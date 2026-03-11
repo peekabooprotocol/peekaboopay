@@ -1,0 +1,30 @@
+{
+  "name": "@pas/core",
+  "version": "0.1.0",
+  "description": "PAS Core Engine — privacy orchestration and state management",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@pas/types": "*",
+    "@noble/curves": "^1.7.0",
+    "@noble/hashes": "^1.6.0"
+  },
+  "devDependencies": {
+    "@pas/tsconfig": "*"
+  }
+}

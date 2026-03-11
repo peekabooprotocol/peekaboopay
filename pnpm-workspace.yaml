@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "packages/adapters/*"
+  - "packages/agent-adapters/*"
+  - "packages/config/*"

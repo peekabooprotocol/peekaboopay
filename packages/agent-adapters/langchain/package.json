@@ -1,0 +1,32 @@
+{
+  "name": "@pas/agent-langchain",
+  "version": "0.1.0",
+  "description": "LangChain tool wrappers for PAS SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@pas/types": "*",
+    "@pas/sdk": "*"
+  },
+  "devDependencies": {
+    "@pas/tsconfig": "*"
+  },
+  "peerDependencies": {
+    "@langchain/core": ">=0.3.0"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@pas/adapter-railgun",
+  "version": "0.1.0",
+  "description": "Railgun privacy backend adapter — shielded ERC-20 via ZK-SNARKs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@pas/types": "*"
+  },
+  "devDependencies": {
+    "@pas/tsconfig": "*"
+  }
+}

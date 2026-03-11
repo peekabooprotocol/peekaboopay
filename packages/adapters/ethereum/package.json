@@ -1,0 +1,28 @@
+{
+  "name": "@pas/adapter-ethereum",
+  "version": "0.1.0",
+  "description": "Native Ethereum privacy adapter — future native shielded ETH support",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@pas/types": "*"
+  },
+  "devDependencies": {
+    "@pas/tsconfig": "*"
+  }
+}

@@ -1,0 +1,17 @@
+# Hardhat artifacts
+artifacts/
+cache/
+typechain-types/
+
+# Coverage
+coverage/
+coverage.json
+
+# Node
+node_modules/
+dist/
+
+# ZK circuits build artifacts
+circuits/build/
+ptau/
+bin/
