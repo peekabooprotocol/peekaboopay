@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <rect width="400" height="400" fill="#0c0b1a"/>
+
+  <!-- Outer orbit oval -->
+  <ellipse cx="200" cy="200" rx="155" ry="58"
+           fill="none" stroke="#00e5b4" stroke-width="2"/>
+
+  <!-- Eyeball -->
+  <circle cx="200" cy="200" r="52" fill="#00a884"/>
+
+  <!-- Iris ring -->
+  <circle cx="200" cy="200" r="38" fill="none" stroke="#005c47" stroke-width="4"/>
+
+  <!-- Pupil -->
+  <circle cx="200" cy="200" r="18" fill="#060614"/>
+</svg>
