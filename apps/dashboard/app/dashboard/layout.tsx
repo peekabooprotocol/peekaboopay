@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
+import { getChainConfig } from "@/lib/chain-config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { clsx } from "clsx";
@@ -24,6 +25,8 @@ export default function DashboardLayout({
 }) {
 	const pathname = usePathname();
 	const { isConnected } = useAccount();
+	const chainId = useChainId();
+	const chain = getChainConfig(chainId);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -66,7 +69,11 @@ export default function DashboardLayout({
 				</nav>
 
 				<div className="p-4 border-t border-border text-xs text-dimmed font-mono">
-					Chain 964 · 0.5% fee
+					<span style={{ color: chain.accentColor }}>
+						{chain.shortName}
+					</span>{" "}
+					· Chain {chainId} ·{" "}
+					{chain.adapter === "bittensor" ? "0.5%" : "0.25%"} fee
 				</div>
 			</aside>
 
