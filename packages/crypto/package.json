@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/crypto",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Cryptographic primitives for Peek-a-boo — Poseidon hashing, Merkle trees, Groth16 proofs",
   "type": "module",
   "main": "./dist/index.js",

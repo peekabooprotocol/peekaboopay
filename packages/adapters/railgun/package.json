@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/adapter-railgun",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Railgun privacy backend adapter — shielded ERC-20 via ZK-SNARKs",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/mcp-server",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "PAS MCP server — expose privacy tools to any MCP-compatible agent",
   "type": "module",
   "main": "./dist/index.js",

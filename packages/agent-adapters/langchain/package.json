@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/agent-langchain",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "LangChain tool wrappers for PAS SDK",
   "type": "module",
   "main": "./dist/index.js",

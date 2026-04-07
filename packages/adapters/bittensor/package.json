@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/adapter-bittensor",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Bittensor EVM privacy adapter — shielded TAO transactions via Subtensor EVM",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/types",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Shared type definitions for the Private Agent Shell",
   "type": "module",
   "main": "./dist/index.js",

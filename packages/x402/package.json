@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/x402",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "x402 'shielded' payment scheme — private HTTP-native payments via Peek-a-boo",
   "type": "module",
   "main": "./dist/index.js",

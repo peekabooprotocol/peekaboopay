@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/core",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "PAS Core Engine — privacy orchestration and state management",
   "type": "module",
   "main": "./dist/index.js",

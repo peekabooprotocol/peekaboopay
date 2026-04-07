@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/adapter-ethereum",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Native Ethereum privacy adapter — future native shielded ETH support",
   "type": "module",
   "main": "./dist/index.js",

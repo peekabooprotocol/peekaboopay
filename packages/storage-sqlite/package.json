@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/storage-sqlite",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "SQLite persistence backend for PAS core modules",
   "type": "module",
   "main": "./dist/index.js",

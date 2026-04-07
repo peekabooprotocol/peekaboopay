@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/sdk",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Private Agent Shell SDK — universal privacy interface for AI agents",
   "type": "module",
   "main": "./dist/index.js",

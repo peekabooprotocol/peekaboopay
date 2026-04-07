@@ -1,6 +1,7 @@
 {
   "name": "@peekaboopay/adapter-aztec",
   "version": "0.1.0",
+  "publishConfig": { "access": "public" },
   "description": "Aztec privacy backend adapter — programmable privacy with private smart contracts",
   "type": "module",
   "main": "./dist/index.js",
