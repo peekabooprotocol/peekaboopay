@@ -69,10 +69,10 @@ peek-a-boo/
 
 | Contract | Address |
 |---|---|
-| **PoseidonT3** | `0x94e6A6EaB47C1DE2Ced10dB042C35C8CF28BD398` |
-| **Groth16Verifier** | `0xA3FFE2Eabc46404A46337c4EC47a62da5F2794ee` |
-| **ShieldedPool** | `0xf42E35258a682D4726880c3c453c4b96821f2b04` |
-| **StealthAnnouncer** | `0xE5e3d47BF0aE09E7D4F6b36A5da285254CCfE0F7` |
+| **PoseidonT3** | `0x389B7E7d332d83157a580ead27884aa0CAB14815` |
+| **Groth16Verifier** | `0x0CD5A7D426ED71D8d1e216FEEADBC2F6574D053D` |
+| **ShieldedPool** | `0xaf2443B3bFc7D4cbD0e58fA175876fF51f7097f59` |
+| **StealthAnnouncer** | `0xF6b3223aC0107e2bd64A982e0212C0b0751c269B` |
 
 Deployer: `0x14d119BEFf4A5dE286C3e4DC5F8C8fc8783f300f`
 Tree depth: 20 (max 1,048,576 deposits)

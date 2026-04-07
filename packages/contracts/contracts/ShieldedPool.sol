@@ -21,16 +21,15 @@ interface IVerifier {
 
 /**
  * @title ShieldedPool
- * @notice Privacy pool for ETH and ERC-20 tokens.
+ * @notice Privacy pool for ETH and ERC-20 tokens with protocol fee.
  *
  *         Deposits insert a commitment into an incremental Merkle tree
  *         using Poseidon hashing (SNARK-friendly, matches circomlib).
  *         Withdrawals consume a nullifier (preventing double-spend),
  *         verify a Groth16 ZK proof, and send funds to the recipient.
  *
- *         The proof demonstrates that the withdrawer knows a secret
- *         (nullifier, secret) corresponding to a commitment in the tree,
- *         without revealing which commitment.
+ *         A protocol fee (in basis points) is deducted on both deposits
+ *         and withdrawals, sent to the fee recipient address.
  */
 contract ShieldedPool is ReentrancyGuard {
     using IncrementalMerkleTree for IncrementalMerkleTree.Tree;
@@ -51,13 +50,29 @@ contract ShieldedPool is ReentrancyGuard {
     /// @notice Tracks which nullifiers have been spent (prevents double-spend)
     mapping(bytes32 => bool) public nullifierHashes;
 
-    /// @notice ETH balance deposited per-address is not tracked — pool is anonymous.
-    ///         Total pool balance is simply address(this).balance for ETH.
-
     /// @notice ERC-20 balances held by the pool, keyed by token address
     mapping(address => uint256) public tokenBalances;
 
     uint32 public immutable levels;
+
+    // ---------------------------------------------------------------
+    // Protocol Fee
+    // ---------------------------------------------------------------
+
+    /// @notice Fee recipient (protocol treasury)
+    address payable public feeRecipient;
+
+    /// @notice Fee in basis points (50 = 0.5%)
+    uint256 public feeBasisPoints;
+
+    /// @notice Maximum fee: 2% (200 basis points)
+    uint256 public constant MAX_FEE_BPS = 200;
+
+    /// @notice Contract owner (can update fee params)
+    address public owner;
+
+    /// @notice Total fees collected per token (address(0) for native)
+    mapping(address => uint256) public feesCollected;
 
     // ---------------------------------------------------------------
     // Events
@@ -75,19 +90,93 @@ contract ShieldedPool is ReentrancyGuard {
         uint256 amount
     );
 
+    event FeeCollected(
+        address indexed token,
+        uint256 amount,
+        address indexed recipient
+    );
+
+    event FeeUpdated(uint256 newFeeBps);
+    event FeeRecipientUpdated(address newRecipient);
+    event OwnerTransferred(address newOwner);
+
+    // ---------------------------------------------------------------
+    // Modifiers
+    // ---------------------------------------------------------------
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+
     // ---------------------------------------------------------------
     // Constructor
     // ---------------------------------------------------------------
 
     /**
-     * @param _levels   Merkle tree depth (20 ≈ 1M deposits)
-     * @param _verifier Address of the deployed Groth16Verifier contract
+     * @param _levels        Merkle tree depth (20 ~ 1M deposits)
+     * @param _verifier      Address of the deployed Groth16Verifier contract
+     * @param _feeRecipient  Address to receive protocol fees
+     * @param _feeBps        Fee in basis points (50 = 0.5%)
      */
-    constructor(uint32 _levels, IVerifier _verifier) {
+    constructor(
+        uint32 _levels,
+        IVerifier _verifier,
+        address payable _feeRecipient,
+        uint256 _feeBps
+    ) {
         require(address(_verifier) != address(0), "Invalid verifier address");
+        require(_feeRecipient != address(0), "Invalid fee recipient");
+        require(_feeBps <= MAX_FEE_BPS, "Fee too high");
+
         levels = _levels;
         verifier = _verifier;
+        feeRecipient = _feeRecipient;
+        feeBasisPoints = _feeBps;
+        owner = msg.sender;
         tree.init(_levels);
+    }
+
+    // ---------------------------------------------------------------
+    // Fee Management
+    // ---------------------------------------------------------------
+
+    /**
+     * @notice Update the protocol fee (owner only).
+     * @param _newFeeBps New fee in basis points (max 200 = 2%)
+     */
+    function setFee(uint256 _newFeeBps) external onlyOwner {
+        require(_newFeeBps <= MAX_FEE_BPS, "Fee too high");
+        feeBasisPoints = _newFeeBps;
+        emit FeeUpdated(_newFeeBps);
+    }
+
+    /**
+     * @notice Update the fee recipient address (owner only).
+     * @param _newRecipient New fee recipient address
+     */
+    function setFeeRecipient(address payable _newRecipient) external onlyOwner {
+        require(_newRecipient != address(0), "Invalid fee recipient");
+        feeRecipient = _newRecipient;
+        emit FeeRecipientUpdated(_newRecipient);
+    }
+
+    /**
+     * @notice Transfer ownership (owner only).
+     * @param _newOwner New owner address
+     */
+    function transferOwnership(address _newOwner) external onlyOwner {
+        require(_newOwner != address(0), "Invalid owner");
+        owner = _newOwner;
+        emit OwnerTransferred(_newOwner);
+    }
+
+    /**
+     * @dev Calculate the fee amount for a given value.
+     */
+    function _calculateFee(uint256 _amount) internal view returns (uint256) {
+        if (feeBasisPoints == 0) return 0;
+        return (_amount * feeBasisPoints) / 10000;
     }
 
     // ---------------------------------------------------------------
@@ -96,12 +185,22 @@ contract ShieldedPool is ReentrancyGuard {
 
     /**
      * @notice Deposit ETH into the shielded pool.
+     *         A protocol fee is deducted and sent to the fee recipient.
      * @param _commitment The commitment hash (hiding amount + blinding factor)
      */
     function deposit(bytes32 _commitment) external payable nonReentrant {
         require(msg.value > 0, "Deposit amount must be > 0");
         require(_commitment != bytes32(0), "Invalid commitment");
         require(!commitments[_commitment], "Duplicate commitment");
+
+        // Calculate and transfer fee
+        uint256 fee = _calculateFee(msg.value);
+        if (fee > 0) {
+            (bool feeSuccess, ) = feeRecipient.call{value: fee}("");
+            require(feeSuccess, "Fee transfer failed");
+            feesCollected[address(0)] += fee;
+            emit FeeCollected(address(0), fee, feeRecipient);
+        }
 
         commitments[_commitment] = true;
 
@@ -112,6 +211,7 @@ contract ShieldedPool is ReentrancyGuard {
 
     /**
      * @notice Deposit ERC-20 tokens into the shielded pool.
+     *         A protocol fee is deducted and sent to the fee recipient.
      * @param _commitment  The commitment hash
      * @param _token       ERC-20 token address
      * @param _amount      Amount of tokens to deposit
@@ -126,9 +226,18 @@ contract ShieldedPool is ReentrancyGuard {
         require(!commitments[_commitment], "Duplicate commitment");
         require(_token != address(0), "Invalid token address");
 
-        // Transfer tokens from sender to pool
+        // Transfer full amount from sender to pool
         IERC20(_token).safeTransferFrom(msg.sender, address(this), _amount);
-        tokenBalances[_token] += _amount;
+
+        // Calculate and transfer fee
+        uint256 fee = _calculateFee(_amount);
+        if (fee > 0) {
+            IERC20(_token).safeTransfer(feeRecipient, fee);
+            feesCollected[_token] += fee;
+            emit FeeCollected(_token, fee, feeRecipient);
+        }
+
+        tokenBalances[_token] += (_amount - fee);
 
         commitments[_commitment] = true;
 
@@ -143,9 +252,10 @@ contract ShieldedPool is ReentrancyGuard {
 
     /**
      * @notice Withdraw funds from the pool using a nullifier.
+     *         A protocol fee is deducted from the withdrawal amount.
      * @param _nullifierHash  The nullifier hash (derived from note secret)
      * @param _recipient      Address to receive the funds
-     * @param _amount         Amount to withdraw
+     * @param _amount         Amount to withdraw (before fee deduction)
      * @param _token          Token address (address(0) for ETH)
      * @param _root           The Merkle root to verify against
      * @param _proof          ABI-encoded Groth16 proof (pA, pB, pC)
@@ -175,6 +285,10 @@ contract ShieldedPool is ReentrancyGuard {
         // Mark nullifier as spent
         nullifierHashes[_nullifierHash] = true;
 
+        // Calculate fee
+        uint256 fee = _calculateFee(_amount);
+        uint256 netAmount = _amount - fee;
+
         // Transfer funds
         if (_token == address(0)) {
             // ETH withdrawal
@@ -182,7 +296,17 @@ contract ShieldedPool is ReentrancyGuard {
                 address(this).balance >= _amount,
                 "Insufficient ETH in pool"
             );
-            (bool success, ) = _recipient.call{value: _amount}("");
+
+            // Send fee to protocol treasury
+            if (fee > 0) {
+                (bool feeSuccess, ) = feeRecipient.call{value: fee}("");
+                require(feeSuccess, "Fee transfer failed");
+                feesCollected[address(0)] += fee;
+                emit FeeCollected(address(0), fee, feeRecipient);
+            }
+
+            // Send net amount to recipient
+            (bool success, ) = _recipient.call{value: netAmount}("");
             require(success, "ETH transfer failed");
         } else {
             // ERC-20 withdrawal
@@ -191,7 +315,16 @@ contract ShieldedPool is ReentrancyGuard {
                 "Insufficient token balance in pool"
             );
             tokenBalances[_token] -= _amount;
-            IERC20(_token).safeTransfer(_recipient, _amount);
+
+            // Send fee to protocol treasury
+            if (fee > 0) {
+                IERC20(_token).safeTransfer(feeRecipient, fee);
+                feesCollected[_token] += fee;
+                emit FeeCollected(_token, fee, feeRecipient);
+            }
+
+            // Send net amount to recipient
+            IERC20(_token).safeTransfer(_recipient, netAmount);
         }
 
         emit Withdrawal(_nullifierHash, _recipient, _amount);
@@ -237,18 +370,6 @@ contract ShieldedPool is ReentrancyGuard {
 
     /**
      * @dev Verify a Groth16 ZK proof using the deployed verifier contract.
-     *
-     *      The proof demonstrates that the prover:
-     *      1. Knows (nullifier, secret) such that Poseidon(nullifier, secret) = commitment
-     *      2. The commitment is a leaf in the Merkle tree under the given root
-     *      3. Poseidon(nullifier) = nullifierHash
-     *      4. The recipient and amount are bound to the proof (anti-front-running)
-     *
-     * @param _proof          ABI-encoded Groth16 proof: (uint[2] pA, uint[2][2] pB, uint[2] pC)
-     * @param _nullifierHash  Public input: Poseidon(nullifier)
-     * @param _root           Public input: Merkle root
-     * @param _recipient      Public input: withdrawal recipient address
-     * @param _amount         Public input: withdrawal amount
      */
     function _verifyProof(
         bytes calldata _proof,
@@ -257,14 +378,11 @@ contract ShieldedPool is ReentrancyGuard {
         address _recipient,
         uint256 _amount
     ) internal view returns (bool) {
-        // Decode Groth16 proof components from the ABI-encoded bytes
         (uint[2] memory pA, uint[2][2] memory pB, uint[2] memory pC) = abi.decode(
             _proof,
             (uint[2], uint[2][2], uint[2])
         );
 
-        // Public signals must match the circuit's public input order:
-        // [root, nullifierHash, recipient, amount]
         uint[4] memory pubSignals = [
             uint256(_root),
             uint256(_nullifierHash),

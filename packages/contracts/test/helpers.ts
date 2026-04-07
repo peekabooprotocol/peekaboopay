@@ -151,7 +151,13 @@ export async function deployPoolWithVerifier(levels: number) {
 			"poseidon-solidity/PoseidonT3.sol:PoseidonT3": poseidonAddr,
 		},
 	});
-	const pool = await PoolFactory.deploy(levels, await verifier.getAddress());
+	const [signer] = await ethers.getSigners();
+	const pool = await PoolFactory.deploy(
+		levels,
+		await verifier.getAddress(),
+		signer.address, // fee recipient = deployer in tests
+		50, // 0.5% fee
+	);
 	await pool.waitForDeployment();
 
 	return { pool, verifier };

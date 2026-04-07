@@ -38,6 +38,7 @@ describe("ZK Circuit Verification", function () {
 	async function depositAndProve(
 		recipientAddr: string,
 		amount: bigint,
+		depositAmount?: bigint,
 	) {
 		const tree = new MerkleTree(TREE_DEPTH);
 		await tree.init();
@@ -45,7 +46,8 @@ describe("ZK Circuit Verification", function () {
 		const deposit = await generateDeposit();
 		const commitmentHex = toBytes32Hex(deposit.commitment);
 
-		await pool.deposit(commitmentHex, { value: amount });
+		// Deposit extra to cover 0.5% fee
+		await pool.deposit(commitmentHex, { value: depositAmount || amount * 2n });
 		const leafIndex = tree.insert(deposit.commitment);
 
 		const merkleProof = await tree.getProof(leafIndex);

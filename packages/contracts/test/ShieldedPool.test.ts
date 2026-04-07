@@ -129,8 +129,11 @@ describe("ShieldedPool", function () {
 			);
 			const balAfter = await token.balanceOf(ownerAddr);
 
-			expect(balBefore - balAfter).to.equal(DEPOSIT_AMOUNT);
-			expect(await token.balanceOf(poolAddr)).to.equal(DEPOSIT_AMOUNT);
+			// Owner sends full amount but receives fee back (owner = feeRecipient in tests)
+			const depositFee = DEPOSIT_AMOUNT * 50n / 10000n;
+			expect(balBefore - balAfter).to.equal(DEPOSIT_AMOUNT - depositFee);
+			// Pool holds deposit minus fee
+			expect(await token.balanceOf(poolAddr)).to.equal(DEPOSIT_AMOUNT - depositFee);
 		});
 
 		it("emits Deposit event with correct leafIndex", async function () {
@@ -176,8 +179,9 @@ describe("ShieldedPool", function () {
 	describe("ETH withdrawals", function () {
 		it("sends ETH to recipient with valid proof", async function () {
 			const recipientAddr = await recipient.getAddress();
-			const depositAmount = ethers.parseEther("1");
-			const withdrawAmount = depositAmount;
+			const depositAmount = ethers.parseEther("2");
+			// Withdraw less than deposit to account for 0.5% deposit fee
+			const withdrawAmount = ethers.parseEther("1");
 
 			// Create off-chain tree to mirror on-chain state
 			const tree = new MerkleTree(TREE_DEPTH);
@@ -228,7 +232,9 @@ describe("ShieldedPool", function () {
 				);
 
 			const balAfter = await ethers.provider.getBalance(recipientAddr);
-			expect(balAfter - balBefore).to.equal(withdrawAmount);
+			// Recipient gets withdrawAmount minus 0.5% withdrawal fee
+			const expectedNet = withdrawAmount - (withdrawAmount * 50n / 10000n);
+			expect(balAfter - balBefore).to.equal(expectedNet);
 		});
 
 		it("rejects already-spent nullifier (double-spend)", async function () {
@@ -284,7 +290,7 @@ describe("ShieldedPool", function () {
 
 		it("rejects unknown Merkle root", async function () {
 			const recipientAddr = await recipient.getAddress();
-			const depositAmount = ethers.parseEther("1");
+			const depositAmount = ethers.parseEther("2");
 
 			const tree = new MerkleTree(TREE_DEPTH);
 			await tree.init();
@@ -366,7 +372,8 @@ describe("ShieldedPool", function () {
 
 		it("marks nullifier as spent after withdrawal", async function () {
 			const recipientAddr = await recipient.getAddress();
-			const amount = ethers.parseEther("1");
+			const depositAmount = ethers.parseEther("2");
+			const amount = ethers.parseEther("1"); // withdraw less than deposit
 
 			const tree = new MerkleTree(TREE_DEPTH);
 			await tree.init();
@@ -375,7 +382,7 @@ describe("ShieldedPool", function () {
 			const commitmentHex = toBytes32Hex(deposit.commitment);
 			const nullifierHashHex = toBytes32Hex(deposit.nullifierHash);
 
-			await pool.deposit(commitmentHex, { value: amount });
+			await pool.deposit(commitmentHex, { value: depositAmount });
 			const leafIndex = tree.insert(deposit.commitment);
 
 			const merkleProof = await tree.getProof(leafIndex);
@@ -413,6 +420,7 @@ describe("ShieldedPool", function () {
 
 	describe("ERC-20 withdrawals", function () {
 		const DEPOSIT_AMOUNT = 1_000_000n;
+		const WITHDRAW_AMOUNT = 500_000n; // Less than deposit to account for fee
 
 		it("sends ERC-20 tokens to recipient with valid proof", async function () {
 			const recipientAddr = await recipient.getAddress();
@@ -441,20 +449,22 @@ describe("ShieldedPool", function () {
 				root,
 				nullifierHash: deposit.nullifierHash,
 				recipient: BigInt(recipientAddr),
-				amount: DEPOSIT_AMOUNT,
+				amount: WITHDRAW_AMOUNT,
 			});
 
 			await pool.withdraw(
 				toBytes32Hex(deposit.nullifierHash),
 				recipientAddr,
-				DEPOSIT_AMOUNT,
+				WITHDRAW_AMOUNT,
 				tokenAddr,
 				toBytes32Hex(root),
 				proofResult.proofBytes,
 			);
 
+			// Recipient gets withdraw amount minus 0.5% withdrawal fee
+			const withdrawFee = WITHDRAW_AMOUNT * 50n / 10000n;
 			expect(await token.balanceOf(recipientAddr)).to.equal(
-				DEPOSIT_AMOUNT,
+				WITHDRAW_AMOUNT - withdrawFee,
 			);
 		});
 
@@ -597,7 +607,9 @@ describe("ShieldedPool", function () {
 			}
 
 			const balAfter = await ethers.provider.getBalance(recipientAddr);
-			expect(balAfter - balBefore).to.equal(ethers.parseEther("1.5"));
+			// Each withdrawal: 0.5 ETH minus 0.5% fee = 0.4975 ETH × 3 = 1.4925 ETH
+			const perWithdrawNet = withdrawAmount - (withdrawAmount * 50n / 10000n);
+			expect(balAfter - balBefore).to.equal(perWithdrawNet * 3n);
 		});
 	});
 });

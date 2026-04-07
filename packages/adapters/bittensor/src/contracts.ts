@@ -5,9 +5,9 @@ import type { Hex } from "@peekaboopay/types";
 // ---------------------------------------------------------------
 
 export const MAINNET_CONTRACTS = {
-	shieldedPool: "0xf42E35258a682D4726880c3c453c4b96821f2b04" as Hex,
-	groth16Verifier: "0xA3FFE2Eabc46404A46337c4EC47a62da5F2794ee" as Hex,
-	stealthAnnouncer: "0xE5e3d47BF0aE09E7D4F6b36A5da285254CCfE0F7" as Hex,
+	shieldedPool: "0xaf2443B3bFc7D4cbD0e58fA175876fF51f7097f59" as Hex,
+	groth16Verifier: "0x0CD5A7D426ED71D8d1e216FEEADBC2F6574D053D" as Hex,
+	stealthAnnouncer: "0xF6b3223aC0107e2bd64A982e0212C0b0751c269B" as Hex,
 };
 
 // ---------------------------------------------------------------

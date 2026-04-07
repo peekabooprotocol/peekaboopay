@@ -40,12 +40,15 @@ async function main() {
 			"poseidon-solidity/PoseidonT3.sol:PoseidonT3": poseidonAddr,
 		},
 	});
-	const pool = await PoolFactory.deploy(TREE_DEPTH, verifierAddr, { gasPrice });
+	const FEE_BPS = 50; // 0.5% protocol fee
+	const feeRecipient = signer.address; // deployer receives fees
+	const pool = await PoolFactory.deploy(TREE_DEPTH, verifierAddr, feeRecipient, FEE_BPS, { gasPrice });
 	await pool.waitForDeployment();
 	const poolAddr = await pool.getAddress();
 	console.log(`  ShieldedPool deployed at: ${poolAddr}`);
 	console.log(`  Tree depth: ${TREE_DEPTH} (max ${2 ** TREE_DEPTH} deposits)`);
 	console.log(`  Verifier: ${verifierAddr}`);
+	console.log(`  Fee: ${FEE_BPS / 100}% → ${feeRecipient}`);
 
 	// Step 4: Deploy StealthAnnouncer
 	console.log("\nDeploying StealthAnnouncer...");
