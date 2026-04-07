@@ -296,12 +296,45 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
 .footer-socials { display: flex; gap: 1.5rem; }
 .footer-socials a { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
 .footer-socials a:hover { color: var(--text); }
-/* ── MARQUEE ── */
-.marquee-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(6,5,17,0.4); position: relative; z-index:1; }
-.marquee-track { display: flex; width: max-content; animation: marq 40s linear infinite; }
-.m-item { font-family: 'DM Mono', monospace; display: inline-flex; align-items: center; gap: 1rem; padding: 0.9rem 2.5rem; font-size: 0.63rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-.m-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--mint); opacity: 0.45; }
-@keyframes marq { to { transform: translateX(-50%); } }
+/* ── CHAIN BAR ── */
+.chain-bar {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(6,5,17,0.4);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem 3rem;
+  text-align: center;
+}
+.chain-bar-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dimmed);
+  margin-bottom: 1rem;
+}
+.chain-bar-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.chain-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.chain-logo:hover { color: var(--text); }
+.chain-logo .coming { color: var(--dimmed); font-style: italic; font-weight: 400; }
+@media (max-width: 920px) {
+  .chain-bar-logos { gap: 1.5rem; }
+}
 /* ── FEATURES GRID ── */
 .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 4rem; }
 /* ── INFO CARD ── */
@@ -466,32 +499,15 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
     <span>scroll</span>
   </div>
 </header>
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <span class="m-item">Shielded Payments<span class="m-sep"></span></span>
-    <span class="m-item">Stealth Addresses (ERC-5564)<span class="m-sep"></span></span>
-    <span class="m-item">Groth16 ZK Proofs<span class="m-sep"></span></span>
-    <span class="m-item">Poseidon Merkle Trees<span class="m-sep"></span></span>
-    <span class="m-item">Multi-Chain Privacy<span class="m-sep"></span></span>
-    <span class="m-item">MCP Server Integration<span class="m-sep"></span></span>
-    <span class="m-item">AI Agent Payments<span class="m-sep"></span></span>
-    <span class="m-item">Railgun Adapter<span class="m-sep"></span></span>
-    <span class="m-item">Bittensor EVM<span class="m-sep"></span></span>
-    <span class="m-item">Policy Engine<span class="m-sep"></span></span>
-    <span class="m-item">Open Source<span class="m-sep"></span></span>
-    <span class="m-item">261 Passing Tests<span class="m-sep"></span></span>
-    <span class="m-item">Shielded Payments<span class="m-sep"></span></span>
-    <span class="m-item">Stealth Addresses (ERC-5564)<span class="m-sep"></span></span>
-    <span class="m-item">Groth16 ZK Proofs<span class="m-sep"></span></span>
-    <span class="m-item">Poseidon Merkle Trees<span class="m-sep"></span></span>
-    <span class="m-item">Multi-Chain Privacy<span class="m-sep"></span></span>
-    <span class="m-item">MCP Server Integration<span class="m-sep"></span></span>
-    <span class="m-item">AI Agent Payments<span class="m-sep"></span></span>
-    <span class="m-item">Railgun Adapter<span class="m-sep"></span></span>
-    <span class="m-item">Bittensor EVM<span class="m-sep"></span></span>
-    <span class="m-item">Policy Engine<span class="m-sep"></span></span>
-    <span class="m-item">Open Source<span class="m-sep"></span></span>
-    <span class="m-item">261 Passing Tests<span class="m-sep"></span></span>
+<div class="chain-bar">
+  <p class="chain-bar-label">Compatible chains</p>
+  <div class="chain-bar-logos">
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00e5b4" stroke-width="1.5"/><text x="12" y="16" text-anchor="middle" fill="#00e5b4" font-size="10" font-family="Plus Jakarta Sans">T</text></svg><span>Bittensor</span></div>
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 14h5.5l-1 8L20 10h-5.5l1-8z" fill="#627EEA"/></svg><span>Ethereum</span></div>
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#F0B90B"/><text x="12" y="16" text-anchor="middle" fill="#0B0E11" font-size="11" font-weight="bold" font-family="Plus Jakarta Sans">B</text></svg><span>BSC</span></div>
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,18 2,18" fill="#8247E5"/></svg><span>Polygon</span></div>
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#28A0F0"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="Plus Jakarta Sans">A</text></svg><span>Arbitrum</span></div>
+    <div class="chain-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="#6b6585" stroke-width="1.5" stroke-dasharray="3 2"/><text x="12" y="16" text-anchor="middle" fill="#6b6585" font-size="9" font-family="Plus Jakarta Sans">AZ</text></svg><span class="coming">Aztec</span></div>
   </div>
 </div>
 <section id="payments" class="section">
