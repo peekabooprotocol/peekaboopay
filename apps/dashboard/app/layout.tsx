@@ -17,8 +17,25 @@ const mono = DM_Mono({
 
 export const metadata: Metadata = {
 	title: "Dashboard — Peek-a-boo",
-	description: "Private payments for web3. Shield. Send. Prove.",
+	description:
+		"Agent-first privacy dashboard. Shield tokens, send private payments, manage API keys for your agents.",
 	icons: { icon: "/favicon.svg" },
+	openGraph: {
+		title: "Peek-a-boo Dashboard",
+		description:
+			"Shield · Unshield · Transfer · API Keys. Agent-first privacy for web3.",
+		images: [{ url: "/og.svg", width: 1200, height: 630 }],
+		siteName: "Peek-a-boo",
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Peek-a-boo Dashboard",
+		description:
+			"Agent-first privacy dashboard. Shield, unshield, transfer, manage API keys.",
+		images: ["/og.svg"],
+	},
+	metadataBase: new URL("https://app.peekaboo.finance"),
 };
 
 export default function RootLayout({

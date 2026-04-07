@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow1" cx="20%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#7b6bff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#00e5b4" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#04030a"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+
+  <!-- Eye logo -->
+  <g transform="translate(530, 140) scale(1.8)">
+    <ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" stroke-width="1.5"/>
+    <circle cx="40" cy="40" r="12" fill="#00a884"/>
+    <circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" stroke-width="2"/>
+    <circle cx="40" cy="40" r="4" fill="#060614"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="310" text-anchor="middle" fill="#ede9ff" font-family="Plus Jakarta Sans, sans-serif" font-size="62" font-weight="800" letter-spacing="-2">
+    peek<tspan fill="#00e5b4">—</tspan>a<tspan fill="#00e5b4">—</tspan>boo
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="370" text-anchor="middle" fill="#a8a0be" font-family="Plus Jakarta Sans, sans-serif" font-size="28" font-weight="400">
+    Agent-First Privacy for Web3
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="425" text-anchor="middle" fill="#6b6585" font-family="DM Mono, monospace" font-size="16" letter-spacing="2">
+    ZK-SNARKs · STEALTH ADDRESSES · MCP-NATIVE · MULTI-CHAIN
+  </text>
+
+  <!-- Chain bar -->
+  <line x1="200" y1="480" x2="1000" y2="480" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+  <text x="600" y="520" text-anchor="middle" fill="#6b6585" font-family="DM Mono, monospace" font-size="13" letter-spacing="3">
+    BITTENSOR · ETHEREUM · BSC · POLYGON · ARBITRUM
+  </text>
+
+  <!-- URL -->
+  <text x="600" y="580" text-anchor="middle" fill="#00e5b4" font-family="DM Mono, monospace" font-size="16" letter-spacing="1">
+    peekaboo.finance
+  </text>
+</svg>
