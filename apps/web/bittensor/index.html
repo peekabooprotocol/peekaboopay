@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bittensor — Peek-a-boo Protocol</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg:      #04030a;
+  --bg2:     #060511;
+  --surface: #0c0b1a;
+  --faint:   rgba(255,255,255,0.055);
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(0,229,180,0.22);
+  --mint:    #00e5b4;
+  --violet:  #7b6bff;
+  --pink:    #ff3d6b;
+  --text:    #ede9ff;
+  --muted:   #6b6585;
+  --body:    #a8a0be;
+  --dimmed:  #2d2847;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none;
+}
+/* noise layer */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 9000;
+}
+/* ── COSMIC NEBULA BACKGROUND ── */
+.nebula {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.neb-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0;
+  animation: nebFloat 18s ease-in-out infinite;
+}
+.neb-orb:nth-child(1) {
+  width: 800px; height: 600px;
+  top: -15%; left: -10%;
+  background: radial-gradient(ellipse, rgba(82,60,180,0.28) 0%, transparent 68%);
+  animation-delay: 0s;
+}
+.neb-orb:nth-child(2) {
+  width: 700px; height: 500px;
+  top: 30%; right: -15%;
+  background: radial-gradient(ellipse, rgba(0,180,140,0.15) 0%, transparent 65%);
+  animation-delay: -6s;
+}
+.neb-orb:nth-child(3) {
+  width: 550px; height: 450px;
+  bottom: -10%; left: 20%;
+  background: radial-gradient(ellipse, rgba(100,60,200,0.20) 0%, transparent 65%);
+  animation-delay: -12s;
+}
+@keyframes nebFloat {
+  0%,100% { opacity: 1; transform: translateY(0) scale(1); }
+  50%      { opacity: 1; transform: translateY(-30px) scale(1.04); }
+}
+/* ── CURSOR ── */
+.cursor { width: 7px; height: 7px; background: var(--mint); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+.cursor-ring { width: 28px; height: 28px; border: 1px solid rgba(0,229,180,0.3); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.15s ease, border-color 0.2s; }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.4s, border-color 0.4s;
+  border-bottom: 1px solid transparent;
+  background: rgba(12,11,26,0.5); backdrop-filter: blur(10px);
+}
+nav.scrolled { background: rgba(12,11,26,0.85); backdrop-filter: blur(18px); border-color: var(--border); }
+.nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.6rem; }
+.nav-logo .a { color: var(--mint); }
+.nav-logo-icon { width: 28px; height: 28px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--mint); }
+.nav-cta { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.55rem 1.25rem; border: 1px solid var(--border2); color: var(--mint); text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: rgba(0,229,180,0.08); }
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 60vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 8rem 2rem 6rem;
+  text-align: center;
+}
+/* hero text */
+.hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; animation: fadeUp 0.8s 0.3s ease both; }
+.hero-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.8rem, 10vw, 8rem);
+  line-height: 0.93;
+  letter-spacing: -0.045em;
+  position: relative; z-index: 2;
+}
+.hero-title .clip { overflow: hidden; display: block; }
+.hero-title .line { display: block; animation: slideUp 0.9s cubic-bezier(0.16,1,0.3,1) both; opacity: 0; transform: translateY(110%); }
+.hero-title .line:nth-child(1) { animation-delay: 0.1s; }
+.hero-title .line:nth-child(2) { animation-delay: 0.22s; color: var(--mint); }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp  { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.hero-sub { font-family: 'DM Mono', monospace; margin-top: 2rem; font-size: 0.73rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); animation: fadeUp 0.8s 0.85s ease both; }
+.hero-btns { margin-top: 2.5rem; display: flex; gap: 0.9rem; animation: fadeUp 0.8s 1.05s ease both; }
+/* ── BUTTONS ── */
+.btn { display: inline-block; font-family: 'DM Mono', monospace; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none; padding: 0.85rem 2rem; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s, color 0.2s; }
+.btn-fill { background: var(--mint); color: #04030a; }
+.btn-fill:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,229,180,0.2); }
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: rgba(255,255,255,0.25); }
+/* ── SECTIONS ── */
+.section { position: relative; z-index: 1; }
+.inner { max-width: 1200px; margin: 0 auto; padding: 7rem 3rem; }
+.inner-alt { max-width: 1200px; margin: 0 auto; padding: 7rem 3rem; }
+.sep { border: none; border-top: 1px solid var(--border); }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+.h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 0.97; letter-spacing: -0.04em; }
+.h2 em { font-style: normal; color: var(--mint); }
+.lead { margin-top: 1.5rem; font-size: 0.82rem; line-height: 1.9; color: var(--body); max-width: 48ch; }
+/* reveal */
+.r { opacity:0; transform:translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.r.v { opacity:1; transform:none; }
+/* ── ACCORDION ── */
+.accord-list { margin-top: 4rem; }
+.accord-item { border-top: 1px solid var(--border); }
+.accord-item:last-child { border-bottom: 1px solid var(--border); }
+.accord-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 2rem 0; cursor: pointer;
+  transition: color 0.2s;
+}
+.accord-head:hover .accord-title { color: var(--mint); }
+.accord-num { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; color: var(--muted); margin-right: 1.25rem; }
+.accord-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em; flex: 1; transition: color 0.2s; }
+.accord-plus {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 1.6rem; color: var(--muted); line-height: 1; width: 28px; text-align: center;
+  transition: transform 0.3s ease, color 0.2s;
+}
+.accord-item.open .accord-plus { transform: rotate(45deg); color: var(--mint); }
+.accord-body {
+  display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease;
+}
+.accord-item.open .accord-body { grid-template-rows: 1fr; }
+.accord-inner { overflow: hidden; }
+.accord-content { padding: 0 0 2.5rem 2rem; font-size: 0.82rem; line-height: 1.9; color: var(--body); max-width: 72ch; border-left: 1px solid var(--border2); }
+.accord-content .chip { display: inline-block; margin-top: 0.9rem; font-size: 0.66rem; font-style: italic; color: var(--mint); background: rgba(0,229,180,0.055); border: 1px solid rgba(0,229,180,0.14); padding: 0.3rem 0.7rem; }
+/* ── HOW IT WORKS ── */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 4rem; }
+.how-card {
+  background: var(--bg);
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column; gap: 1rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+  text-decoration: none;
+}
+.how-card::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, rgba(0,229,180,0.03) 0%, transparent 60%); opacity:0; transition: opacity 0.3s; }
+.how-card:hover { background: var(--bg2); }
+.how-card:hover::before { opacity:1; }
+.how-card-num { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; color: var(--dimmed); }
+.how-card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; color: var(--text); }
+.how-card-body { font-size: 0.78rem; line-height: 1.85; color: var(--body); flex: 1; }
+.how-card-arrow { font-size: 0.7rem; color: var(--mint); align-self: flex-end; transition: transform 0.2s; }
+.how-card:hover .how-card-arrow { transform: translateX(4px); }
+/* ── ARCHITECTURE ── */
+.arch-wrap { margin-top: 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.arch-step { display: flex; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--faint); }
+.arch-step:last-child { border-bottom: none; }
+.arch-snum { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.16em; color: var(--mint); min-width: 2rem; padding-top: 0.15rem; }
+.arch-stitle { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.45rem; }
+.arch-stext { font-size: 0.78rem; line-height: 1.85; color: var(--body); }
+.code-pill { display: inline-block; margin-top: 0.65rem; font-size: 0.64rem; font-style: italic; color: var(--mint); background: rgba(0,229,180,0.05); border: 1px solid rgba(0,229,180,0.12); padding: 0.28rem 0.6rem; }
+/* ── ECO GRID ── */
+.eco-grid { margin-top: 3.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+.eco-card {
+  background: var(--bg);
+  padding: 1.5rem 1.25rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  transition: background 0.25s;
+}
+.eco-card:hover { background: var(--surface); }
+.eco-card-name { font-size: 0.7rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+.eco-card-desc { font-family: 'DM Mono', monospace; font-size: 0.62rem; line-height: 1.6; color: var(--muted); }
+.dot-s { width: 5px; height: 5px; border-radius: 50%; flex-shrink:0; }
+.live { background: var(--mint); }
+.wip  { background: var(--violet); }
+.next { background: var(--muted); }
+/* ── FAQ ── */
+.faq-list { margin-top: 3rem; }
+.faq-item { border-top: 1px solid var(--border); }
+.faq-item:last-child { border-bottom: 1px solid var(--border); }
+.faq-q { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 0; cursor: pointer; font-size: 0.82rem; letter-spacing: 0.02em; transition: color 0.2s; }
+.faq-q:hover { color: var(--mint); }
+.faq-plus { font-size: 1.4rem; font-weight: 400; color: var(--muted); line-height:1; transition: transform 0.3s, color 0.2s; }
+.faq-item.open .faq-plus { transform: rotate(45deg); color: var(--mint); }
+.faq-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease; }
+.faq-item.open .faq-a { grid-template-rows: 1fr; }
+.faq-inner { overflow: hidden; }
+.faq-text { padding: 0 0 1.5rem 0; font-size: 0.8rem; line-height: 1.85; color: var(--body); max-width: 72ch; }
+/* ── CTA ── */
+.cta-band {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 9rem 3rem;
+  text-align: center;
+  overflow: hidden;
+}
+.cta-band::before {
+  content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+  width: 800px; height: 500px;
+  background: radial-gradient(ellipse, rgba(82,60,180,0.22) 0%, transparent 65%);
+  pointer-events:none;
+}
+.cta-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+.cta-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(3.5rem, 9vw, 6.5rem); line-height: 0.92; letter-spacing: -0.05em; margin-bottom: 1.5rem; }
+.cta-title em { font-style: normal; color: var(--mint); }
+.cta-sub { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 2.75rem; }
+.cta-btns { display: flex; justify-content: center; gap: 1rem; }
+/* ── FOOTER ── */
+footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 4rem 3rem 2.5rem; }
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
+.footer-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 0.75rem; }
+.footer-tagline { font-size: 0.67rem; color: var(--muted); line-height: 1.7; max-width: 28ch; }
+.footer-cols { display: flex; gap: 5rem; }
+.footer-col-title { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-col a { font-size: 0.72rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--faint); font-size: 0.62rem; color: var(--dimmed); }
+.footer-socials { display: flex; gap: 1.5rem; }
+.footer-socials a { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-socials a:hover { color: var(--text); }
+/* ── MARQUEE ── */
+.marquee-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(6,5,17,0.4); position: relative; z-index:1; }
+.marquee-track { display: flex; width: max-content; animation: marq 40s linear infinite; }
+.m-item { font-family: 'DM Mono', monospace; display: inline-flex; align-items: center; gap: 1rem; padding: 0.9rem 2.5rem; font-size: 0.63rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.m-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--mint); opacity: 0.45; }
+@keyframes marq { to { transform: translateX(-50%); } }
+/* ── DOC TABLE ── */
+.doc-table { width: 100%; margin: 1.25rem 0 1.5rem; border-collapse: collapse; font-size: 0.72rem; }
+.doc-table th { text-align: left; font-weight: 400; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--surface); }
+.doc-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--faint); color: var(--muted); line-height: 1.7; }
+.doc-table td:first-child { color: var(--text); }
+.doc-table code { color: var(--mint); font-size: 0.68rem; }
+.info-card { border: 1px solid var(--border); background: var(--surface); padding: 1.5rem 1.75rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+.info-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: var(--mint); }
+.info-card-label { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mint); margin-bottom: 0.6rem; }
+.info-card p { font-size: 0.74rem; line-height: 1.85; color: var(--muted); }
+.info-card code { color: var(--mint); background: rgba(0,229,180,0.06); padding: 0.1rem 0.35rem; font-size: 0.68rem; border: 1px solid rgba(0,229,180,0.1); }
+/* ── RESPONSIVE ── */
+@media (max-width: 920px) {
+  nav { padding: 1rem 1.5rem; }
+  .inner, .inner-alt { padding: 5rem 1.5rem; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .arch-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .eco-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { flex-direction: column; gap: 2.5rem; }
+  .footer-cols { gap: 3rem; }
+  .doc-table { font-size: 0.65rem; }
+  .doc-table th, .doc-table td { padding: 0.5rem 0.6rem; }
+}
+/* ── PARTICLE CANVAS ── */
+.particle-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* ── SCROLL TEXT REVEAL ── */
+.reveal-text .word {
+  display: inline-block;
+  opacity: 0.12;
+  transition: opacity 0.5s ease;
+}
+.reveal-text .word.lit {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+<canvas class="particle-canvas" id="particles"></canvas>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="nebula">
+  <div class="neb-orb"></div>
+  <div class="neb-orb"></div>
+  <div class="neb-orb"></div>
+</div>
+<nav id="nav">
+  <a href="/" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" stroke-width="1.5"/>
+      <circle cx="40" cy="40" r="12" fill="#00a884"/>
+      <circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" stroke-width="2"/>
+      <circle cx="40" cy="40" r="4" fill="#060614"/>
+    </svg>
+    peek<span class="a">—</span>a<span class="a">—</span>boo
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#payments">Payments</a></li>
+    <li><a href="/bittensor/" class="active">Bittensor</a></li>
+    <li><a href="/#stack">Stack</a></li>
+    <li><a href="/docs/">Docs</a></li>
+    <li><a href="/get-started/" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+<header class="hero">
+  <p class="hero-eyebrow">Bittensor Privacy</p>
+  <h1 class="hero-title">
+    <span class="clip"><span class="line">Inference privacy</span></span>
+    <span class="clip"><span class="line">for AI agents</span></span>
+  </h1>
+  <p class="hero-sub">Shielded TAO · Anonymous miners · ZK proofs · Deployed on Subtensor EVM</p>
+  <div class="hero-btns">
+    <a href="/get-started/" class="btn btn-fill">Get Started</a>
+    <a href="/docs/#bittensor" class="btn btn-outline">View Docs</a>
+  </div>
+</header>
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="m-item">Shielded TAO<span class="m-sep"></span></span>
+    <span class="m-item">Anonymous Miner Routing<span class="m-sep"></span></span>
+    <span class="m-item">ERC-5564 Stealth Addresses<span class="m-sep"></span></span>
+    <span class="m-item">Groth16 ZK Proofs<span class="m-sep"></span></span>
+    <span class="m-item">Poseidon Merkle Trees<span class="m-sep"></span></span>
+    <span class="m-item">Bittensor Subtensor EVM<span class="m-sep"></span></span>
+    <span class="m-item">Chain ID 964<span class="m-sep"></span></span>
+    <span class="m-item">261 Passing Tests<span class="m-sep"></span></span>
+    <span class="m-item">Double-Spend Prevention<span class="m-sep"></span></span>
+    <span class="m-item">MCP Server Integration<span class="m-sep"></span></span>
+    <span class="m-item">Shielded TAO<span class="m-sep"></span></span>
+    <span class="m-item">Anonymous Miner Routing<span class="m-sep"></span></span>
+    <span class="m-item">ERC-5564 Stealth Addresses<span class="m-sep"></span></span>
+    <span class="m-item">Groth16 ZK Proofs<span class="m-sep"></span></span>
+    <span class="m-item">Poseidon Merkle Trees<span class="m-sep"></span></span>
+    <span class="m-item">Bittensor Subtensor EVM<span class="m-sep"></span></span>
+    <span class="m-item">Chain ID 964<span class="m-sep"></span></span>
+    <span class="m-item">261 Passing Tests<span class="m-sep"></span></span>
+    <span class="m-item">Double-Spend Prevention<span class="m-sep"></span></span>
+    <span class="m-item">MCP Server Integration<span class="m-sep"></span></span>
+  </div>
+</div>
+<section id="protocol" class="section">
+<hr class="sep">
+<div class="inner">
+  <p class="eyebrow r">01 / Protocol</p>
+  <h2 class="h2 r" style="transition-delay:0.08s">Privacy isn't a feature.<br>It's <em>the foundation.</em></h2>
+  <p class="lead r" style="transition-delay:0.16s">Peek-a-boo is a privacy middleware layer for AI agents on Bittensor. Shield payments. Route anonymously. Prove everything cryptographically.</p>
+  <div class="accord-list">
+    <div class="accord-item r" style="transition-delay:0.1s">
+      <div class="accord-head" onclick="tog(this)">
+        <span class="accord-num">01</span>
+        <span class="accord-title">Peek-a-boo shields agent payments</span>
+        <span class="accord-plus">+</span>
+      </div>
+      <div class="accord-body"><div class="accord-inner"><div class="accord-content">
+        Your agent deposits TAO into a ShieldedPool smart contract on Bittensor's Subtensor EVM. The deposit inserts a Poseidon commitment into a depth-20 Merkle tree. To withdraw, the agent generates a Groth16 ZK proof of pool membership — revealing nothing about the originating identity, amount path, or timing. A 30-root history buffer prevents race conditions between deposits and withdrawals.
+        <div class="chip">commitment = Poseidon(nullifier, secret)</div>
+      </div></div></div>
+    </div>
+    <div class="accord-item r" style="transition-delay:0.18s">
+      <div class="accord-head" onclick="tog(this)">
+        <span class="accord-num">02</span>
+        <span class="accord-title">Peek-a-boo routes inferences anonymously</span>
+        <span class="accord-plus">+</span>
+      </div>
+      <div class="accord-body"><div class="accord-inner"><div class="accord-content">
+        Each inference request generates a fresh ERC-5564 stealth address via ECDH key exchange between your agent's ephemeral key and the miner's public key. The StealthAnnouncer contract emits events for off-chain scanning via viewTag fast-scan filter. Miners receive payment at a one-time address that can't be correlated back to your agent across sessions.
+        <div class="chip">stealth = ECDH(ephemeralKey, recipientPub)</div>
+      </div></div></div>
+    </div>
+    <div class="accord-item r" style="transition-delay:0.26s">
+      <div class="accord-head" onclick="tog(this)">
+        <span class="accord-num">03</span>
+        <span class="accord-title">Peek-a-boo proves without revealing</span>
+        <span class="accord-plus">+</span>
+      </div>
+      <div class="accord-body"><div class="accord-inner"><div class="accord-content">
+        All cryptographic operations use pure-JS @noble/curves and @noble/hashes — no native bindings, no Node dependency. The Circom-based Withdraw circuit compiles to a depth-20 Merkle proof verifier with Poseidon hashing. Public inputs are bound to recipient + amount using a square-constraint anti-front-running technique from the Tornado Cash pattern.
+        <div class="chip">nullifierHash = Poseidon(nullifier)</div>
+      </div></div></div>
+    </div>
+    <div class="accord-item r" style="transition-delay:0.34s">
+      <div class="accord-head" onclick="tog(this)">
+        <span class="accord-num">04</span>
+        <span class="accord-title">Peek-a-boo integrates with any agent framework</span>
+        <span class="accord-plus">+</span>
+      </div>
+      <div class="accord-body"><div class="accord-inner"><div class="accord-content">
+        The @peekaboopay/mcp-server package exposes all privacy operations as MCP tools — meaning any MCP-compatible agent (Claude, OpenClaw, custom daemons) can call shield, unshield, and stealth routing as native tool calls. LangChain and CrewAI wrappers are in active development. Constructor-injected storage adapters support in-memory by default and SQLite opt-in.
+        <div class="chip">mcp-server · langchain · crewai</div>
+      </div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+<section id="mechanism" class="section">
+<hr class="sep">
+<div class="inner">
+  <p class="eyebrow r">02 / Mechanism</p>
+  <h2 class="h2 r" style="transition-delay:0.08s">How the <em>privacy engine</em> works</h2>
+  <div class="cards-grid">
+    <div class="how-card r" style="transition-delay:0.08s">
+      <div class="how-card-num">— 01</div>
+      <div class="how-card-title">Shield your TAO</div>
+      <div class="how-card-body">Deposit TAO into the ShieldedPool contract. A Poseidon commitment is inserted into the on-chain Merkle tree. Your agent holds the nullifier + secret off-chain.</div>
+      <div class="how-card-arrow">→</div>
+    </div>
+    <div class="how-card r" style="transition-delay:0.16s">
+      <div class="how-card-num">— 02</div>
+      <div class="how-card-title">Route via stealth address</div>
+      <div class="how-card-body">A fresh ERC-5564 stealth address is generated per inference. The StealthAnnouncer emits events. Miners scan with viewTag for their payments — no public linkability.</div>
+      <div class="how-card-arrow">→</div>
+    </div>
+    <div class="how-card r" style="transition-delay:0.24s">
+      <div class="how-card-num">— 03</div>
+      <div class="how-card-title">Prove membership</div>
+      <div class="how-card-body">Generate a Groth16 ZK proof of Merkle membership. The verifier contract checks the proof on-chain, validates the nullifier registry, and releases funds atomically.</div>
+      <div class="how-card-arrow">→</div>
+    </div>
+  </div>
+  <div class="arch-wrap">
+    <div class="arch-steps">
+      <div class="arch-step r" style="transition-delay:0.1s">
+        <div class="arch-snum">01</div>
+        <div>
+          <div class="arch-stitle">Policy Engine</div>
+          <div class="arch-stext">Per-transaction and cumulative spend limits with time windows. Whitelist/denylist. Chain restrictions. Priority-ordered rule evaluation. 20 tests passing.</div>
+        </div>
+      </div>
+      <div class="arch-step r" style="transition-delay:0.18s">
+        <div class="arch-snum">02</div>
+        <div>
+          <div class="arch-stitle">Session Manager</div>
+          <div class="arch-stext">Session lifecycle create → active → expired/terminated. Auto-expiry on access. Stale-session cleanup. Isolated per-agent context.</div>
+        </div>
+      </div>
+      <div class="arch-step r" style="transition-delay:0.26s">
+        <div class="arch-snum">03</div>
+        <div>
+          <div class="arch-stitle">Shielded Treasury</div>
+          <div class="arch-stext">UTXO note management. Nullifier-based double-spend prevention. Greedy UTXO selection. Multi-token balances. Transactional markSpent() for atomic nullifier marking.</div>
+          <div class="code-pill">PASResult&lt;T&gt; for all fallible ops</div>
+        </div>
+      </div>
+      <div class="arch-step r" style="transition-delay:0.34s">
+        <div class="arch-snum">04</div>
+        <div>
+          <div class="arch-stitle">Stealth Addresses</div>
+          <div class="arch-stext">ERC-5564 ECDH stealth generation. viewTag fast-scan filter. Round-trip generate → scan verification. secp256k1 point arithmetic via @noble/curves.</div>
+        </div>
+      </div>
+    </div>
+    <div class="r" style="transition-delay:0.3s">
+      <svg viewBox="0 0 380 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;display:block;margin:auto">
+        <defs>
+          <marker id="a1" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="rgba(0,229,180,0.5)"/></marker>
+          <marker id="a2" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="rgba(255,61,107,0.5)"/></marker>
+          <marker id="a3" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="rgba(123,107,255,0.5)"/></marker>
+        </defs>
+        <rect x="16" y="20" width="128" height="52" rx="2" fill="#08071a" stroke="rgba(0,229,180,0.25)" stroke-width="1"/>
+        <text x="80" y="41" font-family="DM Mono" font-size="8" fill="#00e5b4" text-anchor="middle" letter-spacing="1.5">AI AGENT</text>
+        <text x="80" y="58" font-family="DM Mono" font-size="7" fill="#6b6585" text-anchor="middle">policy · sessions · treasury</text>
+        <rect x="238" y="20" width="128" height="52" rx="2" fill="#08071a" stroke="#00e5b4" stroke-width="1.5"/>
+        <text x="302" y="41" font-family="DM Mono" font-size="8" fill="#00e5b4" text-anchor="middle" letter-spacing="1">SHIELDED POOL</text>
+        <text x="302" y="58" font-family="DM Mono" font-size="7" fill="#6b6585" text-anchor="middle">Bittensor EVM · Chain 964</text>
+        <line x1="144" y1="43" x2="236" y2="43" stroke="rgba(0,229,180,0.3)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+        <text x="190" y="37" font-family="DM Mono" font-size="6.5" fill="rgba(0,229,180,0.5)" text-anchor="middle">deposit TAO</text>
+        <rect x="238" y="108" width="128" height="90" rx="2" fill="#060514" stroke="rgba(0,229,180,0.1)" stroke-width="1"/>
+        <text x="302" y="126" font-family="DM Mono" font-size="6.5" fill="#6b6585" text-anchor="middle" letter-spacing="0.5">POSEIDON MERKLE TREE</text>
+        <circle cx="302" cy="154" r="12" fill="#0a0918" stroke="#00e5b4" stroke-width="1"/>
+        <text x="302" y="158" font-family="DM Mono" font-size="6" fill="#00e5b4" text-anchor="middle">root</text>
+        <line x1="292" y1="165" x2="274" y2="180" stroke="rgba(0,229,180,0.2)" stroke-width="1"/>
+        <line x1="312" y1="165" x2="330" y2="180" stroke="rgba(0,229,180,0.2)" stroke-width="1"/>
+        <circle cx="274" cy="184" r="7" fill="rgba(0,229,180,0.1)" stroke="rgba(0,229,180,0.3)" stroke-width="1"/>
+        <circle cx="330" cy="184" r="7" fill="rgba(0,229,180,0.4)" stroke="#00e5b4" stroke-width="1.5"/>
+        <text x="344" y="183" font-family="DM Mono" font-size="5.5" fill="rgba(0,229,180,0.7)">← new commit</text>
+        <line x1="302" y1="72" x2="302" y2="106" stroke="rgba(0,229,180,0.25)" stroke-width="1" marker-end="url(#a1)"/>
+        <rect x="16" y="170" width="128" height="52" rx="2" fill="#08071a" stroke="rgba(255,61,107,0.3)" stroke-width="1"/>
+        <text x="80" y="191" font-family="DM Mono" font-size="8" fill="rgba(255,61,107,0.9)" text-anchor="middle" letter-spacing="1">ZK PROVER</text>
+        <text x="80" y="208" font-family="DM Mono" font-size="7" fill="#6b6585" text-anchor="middle">Groth16 · Circom depth-20</text>
+        <line x1="80" y1="72" x2="80" y2="168" stroke="rgba(0,229,180,0.2)" stroke-width="1" marker-end="url(#a1)"/>
+        <line x1="144" y1="188" x2="236" y2="140" stroke="rgba(255,61,107,0.35)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+        <text x="200" y="162" font-family="DM Mono" font-size="6" fill="rgba(255,61,107,0.55)" text-anchor="middle">Groth16 proof</text>
+        <rect x="127" y="268" width="128" height="52" rx="2" fill="#08071a" stroke="rgba(123,107,255,0.28)" stroke-width="1"/>
+        <text x="191" y="289" font-family="DM Mono" font-size="8" fill="rgba(123,107,255,0.9)" text-anchor="middle" letter-spacing="0.5">STEALTH ADDR</text>
+        <text x="191" y="306" font-family="DM Mono" font-size="7" fill="#6b6585" text-anchor="middle">ERC-5564 · ECDH viewTag</text>
+        <line x1="100" y1="220" x2="158" y2="268" stroke="rgba(123,107,255,0.3)" stroke-width="1" marker-end="url(#a3)"/>
+        <rect x="16" y="340" width="108" height="46" rx="2" fill="#08071a" stroke="rgba(107,101,133,0.3)" stroke-width="1"/>
+        <text x="70" y="360" font-family="DM Mono" font-size="8" fill="#6b6585" text-anchor="middle">MINER</text>
+        <text x="70" y="376" font-family="DM Mono" font-size="7" fill="#2d2847" text-anchor="middle">Bittensor subnet</text>
+        <line x1="148" y1="295" x2="122" y2="340" stroke="rgba(123,107,255,0.25)" stroke-width="1" stroke-dasharray="3 2.5" marker-end="url(#a3)"/>
+        <text x="108" y="320" font-family="DM Mono" font-size="6" fill="rgba(123,107,255,0.45)" text-anchor="middle">anonymous</text>
+        <text x="191" y="395" font-family="DM Mono" font-size="6" fill="#2d2847" text-anchor="middle">261 tests · phases 0–7 complete</text>
+      </svg>
+    </div>
+  </div>
+</div>
+</section>
+<section id="deployed" class="section">
+<hr class="sep">
+<div class="inner">
+  <p class="eyebrow r">03 / Deployed</p>
+  <h2 class="h2 r" style="transition-delay:0.08s">Live on <em>Bittensor mainnet</em></h2>
+  <table class="doc-table r" style="transition-delay:0.16s">
+    <thead>
+      <tr>
+        <th>Network</th>
+        <th>Chain ID</th>
+        <th>RPC</th>
+        <th>Currency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Mainnet</td>
+        <td><code>964</code></td>
+        <td><code>lite.chain.opentensor.ai</code></td>
+        <td>TAO (18 decimals)</td>
+      </tr>
+      <tr>
+        <td>Testnet</td>
+        <td><code>945</code></td>
+        <td><code>test.chain.opentensor.ai</code></td>
+        <td>TAO (18 decimals)</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="doc-table r" style="transition-delay:0.24s">
+    <thead>
+      <tr>
+        <th>Contract</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PoseidonT3</td>
+        <td><code>0x94e6A6EaB47C1DE2Ced10dB042C35C8CF28BD398</code></td>
+      </tr>
+      <tr>
+        <td>Groth16Verifier</td>
+        <td><code>0xA3FFE2Eabc46404A46337c4EC47a62da5F2794ee</code></td>
+      </tr>
+      <tr>
+        <td>ShieldedPool</td>
+        <td><code>0xf42E35258a682D4726880c3c453c4b96821f2b04</code></td>
+      </tr>
+      <tr>
+        <td>StealthAnnouncer</td>
+        <td><code>0xE5e3d47BF0aE09E7D4F6b36A5da285254CCfE0F7</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="info-card r" style="transition-delay:0.32s">
+    <div class="info-card-label">Deployment Details</div>
+    <p>Tree depth: <code>20</code> levels — supports up to <code>1,048,576</code> deposits. Deployer: <code>0x14d119BEFf4A5dE286C3e4DC5F8C8fc8783f300f</code></p>
+  </div>
+</div>
+</section>
+<section id="faq" class="section">
+<hr class="sep">
+<div class="inner">
+  <p class="eyebrow r">04 / FAQ</p>
+  <h2 class="h2 r" style="transition-delay:0.08s">Frequently asked<br><em>questions</em></h2>
+  <div class="faq-list">
+    <div class="faq-item r" style="transition-delay:0.1s">
+      <div class="faq-q" onclick="tog(this)"><span>Why Bittensor?</span><span class="faq-plus">+</span></div>
+      <div class="faq-a"><div class="faq-inner"><div class="faq-text">Bittensor's Subtensor EVM is the primary market for AI agent inference. TAO-denominated payments between agents and miners create a natural surface for privacy attacks — correlating who queries what, from where, and how often. Peek-a-boo makes those payments opaque. Ethereum L2 and Aztec adapters are also on the roadmap.</div></div></div>
+    </div>
+    <div class="faq-item r" style="transition-delay:0.17s">
+      <div class="faq-q" onclick="tog(this)"><span>Are the contracts audited?</span><span class="faq-plus">+</span></div>
+      <div class="faq-a"><div class="faq-inner"><div class="faq-text">The contracts are open source but have not yet been formally audited. A professional security audit is on the roadmap before expanding production usage. All code is publicly verifiable on GitHub.</div></div></div>
+    </div>
+    <div class="faq-item r" style="transition-delay:0.24s">
+      <div class="faq-q" onclick="tog(this)"><span>How do I integrate with my agent?</span><span class="faq-plus">+</span></div>
+      <div class="faq-a"><div class="faq-inner"><div class="faq-text">The @peekaboopay/mcp-server package exposes all privacy operations as MCP-compatible tools. Any agent that supports MCP (Claude, OpenClaw, custom daemons) can call shield, unshield, and stealth routing natively. LangChain and CrewAI wrapper packages are actively being developed. The @peekaboopay/sdk provides a high-level programmatic API for direct integration.</div></div></div>
+    </div>
+    <div class="faq-item r" style="transition-delay:0.31s">
+      <div class="faq-q" onclick="tog(this)"><span>Can I use Peek-a-boo for non-inference payments on Bittensor?</span><span class="faq-plus">+</span></div>
+      <div class="faq-a"><div class="faq-inner"><div class="faq-text">Yes. The ShieldedPool accepts any TAO deposit regardless of purpose. The privacy guarantees — Poseidon commitments, Groth16 ZK proofs, nullifier-based double-spend prevention — are the same whether you're paying for inference, transferring TAO between wallets, or any other on-chain operation.</div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+<div class="cta-band">
+  <div style="position:relative;z-index:1">
+    <p class="cta-eyebrow r">Contracts deployed on mainnet</p>
+    <h2 class="cta-title r" style="transition-delay:0.1s">Shield your<br><em>TAO.</em></h2>
+    <p class="cta-sub r" style="transition-delay:0.2s">Bittensor mainnet · ZK circuits · 261 passing tests · MCP-native</p>
+    <div class="cta-btns r" style="transition-delay:0.3s">
+      <a href="/get-started/" class="btn btn-fill">Get Started</a>
+      <a href="/docs/" class="btn btn-outline">Read the Docs</a>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">peek<span style="color:var(--mint)">—</span>a<span style="color:var(--mint)">—</span>boo</div>
+        <div class="footer-tagline">Private payments for web3. Shield. Send. Prove.</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul>
+            <li><a href="/">Payments</a></li>
+            <li><a href="/bittensor/">Bittensor</a></li>
+            <li><a href="/#stack">Stack</a></li>
+            <li><a href="/docs/">Docs</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul>
+            <li><a href="https://github.com" target="_blank">GitHub</a></li>
+            <li><a href="/docs/">Docs</a></li>
+            <li><a href="https://discord.gg" target="_blank">Discord</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Chains</div>
+          <ul>
+            <li><a href="#">Bittensor EVM</a></li>
+            <li><a href="#">Railgun</a></li>
+            <li><a href="#">Ethereum L2</a></li>
+            <li><a href="#">Aztec</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>&copy; 2026 Peek-a-boo</span>
+      <div class="footer-socials">
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="https://discord.gg"  target="_blank">Discord</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+(function() {
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('ring');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function loop(){ rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ ring.style.transform='translate(-50%,-50%) scale(1.65)'; ring.style.borderColor='rgba(0,229,180,0.65)'; });
+    el.addEventListener('mouseleave',()=>{ ring.style.transform='translate(-50%,-50%) scale(1)'; ring.style.borderColor='rgba(0,229,180,0.3)'; });
+  });
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{ nav.classList.toggle('scrolled', window.scrollY>60); }, {passive:true});
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('v'); });
+  }, {threshold:0.1});
+  document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+  window.tog = function(head) {
+    const item = head.closest('.accord-item, .faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.accord-item.open, .faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  };
+  /* ── PARTICLES ── */
+  (function(){
+    const c = document.getElementById('particles');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let w, h, pts = [];
+    function resize(){ w=c.width=window.innerWidth; h=c.height=window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    for(let i=0;i<80;i++){
+      pts.push({
+        x: Math.random()*w, y: Math.random()*h,
+        vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+        s: Math.random()*2+0.5, a: Math.random()*0.5+0.15
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(const p of pts){
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0)p.x=w; if(p.x>w)p.x=0;
+        if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+        ctx.fillStyle=`rgba(0,229,180,${p.a})`;
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      }
+      const scrollFade = Math.max(0, 1 - window.scrollY / (window.innerHeight * 1.2));
+      c.style.opacity = scrollFade;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+  /* ── SCROLL TEXT REVEAL ── */
+  (function(){
+    function wrapWords(node) {
+      const frag = document.createDocumentFragment();
+      node.childNodes.forEach(child => {
+        if (child.nodeType === 3) {
+          const parts = child.textContent.split(/(\s+)/);
+          parts.forEach(p => {
+            if (/^\s+$/.test(p) || p === '') {
+              frag.appendChild(document.createTextNode(p));
+            } else {
+              const span = document.createElement('span');
+              span.className = 'word';
+              span.textContent = p;
+              frag.appendChild(span);
+            }
+          });
+        } else if (child.nodeType === 1) {
+          if (child.tagName === 'BR') {
+            frag.appendChild(child.cloneNode());
+          } else {
+            const clone = child.cloneNode(false);
+            wrapWords(child).childNodes.forEach(c => clone.appendChild(c.cloneNode(true)));
+            frag.appendChild(clone);
+          }
+        }
+      });
+      return frag;
+    }
+    document.querySelectorAll('.h2, .lead').forEach(el => {
+      if(el.dataset.noReveal) return;
+      const frag = wrapWords(el);
+      el.innerHTML = '';
+      el.appendChild(frag);
+      el.classList.add('reveal-text');
+    });
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const words = entry.target.querySelectorAll('.word');
+          words.forEach((w,i) => {
+            setTimeout(() => w.classList.add('lit'), i * 40);
+          });
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal-text').forEach(el => revealObs.observe(el));
+  })();
+})();
+</script>
+</body>
+</html>

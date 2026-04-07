@@ -4,7 +4,7 @@ import type {
 	SettlementProvider,
 	TransactionHash,
 	TransactionStatus,
-} from "@pas/types";
+} from "@peekaboopay/types";
 
 export class EthereumL1Provider implements SettlementProvider {
 	readonly chainId: ChainId = 1;

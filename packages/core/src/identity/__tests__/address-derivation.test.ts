@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { AddressDerivationImpl } from "../address-derivation";
 import { secp256k1 } from "@noble/curves/secp256k1";
-import type { Address, Hex, PublicKey } from "@pas/types";
-import type { StealthAnnouncement } from "@pas/types";
+import type { Address, Hex, PublicKey } from "@peekaboopay/types";
+import type { StealthAnnouncement } from "@peekaboopay/types";
 
 /** Helper: derive an uncompressed public key hex from a private key hex */
 function pubKeyFromPriv(privHex: string): PublicKey {

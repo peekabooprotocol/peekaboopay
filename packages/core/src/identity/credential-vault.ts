@@ -1,4 +1,4 @@
-import type { Credential, CredentialFilter, CredentialVault, DisclosureRequest, Proof } from "@pas/types";
+import type { Credential, CredentialFilter, CredentialVault, DisclosureRequest, Proof } from "@peekaboopay/types";
 
 export class CredentialVaultImpl implements CredentialVault {
 	async store(_credential: Credential): Promise<void> {

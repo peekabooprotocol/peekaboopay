@@ -1,10 +1,10 @@
-import type { PASClient } from "@pas/sdk";
+import type { PASClient } from "@peekaboopay/sdk";
 
 /**
  * Creates LangChain-compatible tool definitions from a PASClient instance.
  *
  * Usage with LangChain:
- *   import { createPASTools } from "@pas/agent-langchain";
+ *   import { createPASTools } from "@peekaboopay/agent-langchain";
  *   const tools = createPASTools(pasClient);
  *   const agent = createReactAgent({ llm, tools });
  */

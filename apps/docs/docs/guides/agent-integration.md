@@ -9,8 +9,8 @@ How to integrate PAS with different agent frameworks.
 ## LangChain
 
 ```typescript
-import { PASClient } from "@pas/sdk";
-import { createPASTools } from "@pas/agent-langchain";
+import { PASClient } from "@peekaboopay/sdk";
+import { createPASTools } from "@peekaboopay/agent-langchain";
 
 const pas = new PASClient(backend);
 const tools = createPASTools(pas);
@@ -22,8 +22,8 @@ const agent = createReactAgent({ llm, tools });
 ## CrewAI
 
 ```typescript
-import { PASClient } from "@pas/sdk";
-import { createCrewAITools } from "@pas/agent-crewai";
+import { PASClient } from "@peekaboopay/sdk";
+import { createCrewAITools } from "@peekaboopay/agent-crewai";
 
 const pas = new PASClient(backend);
 const tools = createCrewAITools(pas);

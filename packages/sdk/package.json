@@ -1,5 +1,5 @@
 {
-  "name": "@pas/sdk",
+  "name": "@peekaboopay/sdk",
   "version": "0.1.0",
   "description": "Private Agent Shell SDK — universal privacy interface for AI agents",
   "type": "module",
@@ -20,10 +20,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*",
-    "@pas/core": "*"
+    "@peekaboopay/types": "*",
+    "@peekaboopay/core": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

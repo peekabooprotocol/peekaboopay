@@ -1,5 +1,5 @@
 {
-  "name": "@pas/mcp-server",
+  "name": "@peekaboopay/mcp-server",
   "version": "0.1.0",
   "description": "PAS MCP server — expose privacy tools to any MCP-compatible agent",
   "type": "module",
@@ -23,12 +23,12 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*",
-    "@pas/sdk": "*",
+    "@peekaboopay/types": "*",
+    "@peekaboopay/sdk": "*",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

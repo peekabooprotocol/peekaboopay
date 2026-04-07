@@ -12,7 +12,7 @@ import type {
 	TimeBoundRule,
 	TokenInfo,
 	WhitelistRule,
-} from "@pas/types";
+} from "@peekaboopay/types";
 import { InMemoryPolicyStore } from "./in-memory-policy-store";
 
 export class PolicyEngineImpl implements PolicyEngine {

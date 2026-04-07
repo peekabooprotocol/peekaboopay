@@ -1,5 +1,5 @@
 {
-  "name": "@pas/storage-sqlite",
+  "name": "@peekaboopay/storage-sqlite",
   "version": "0.1.0",
   "description": "SQLite persistence backend for PAS core modules",
   "type": "module",
@@ -20,11 +20,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*",
+    "@peekaboopay/types": "*",
     "better-sqlite3": "^11.0.0"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*",
+    "@peekaboopay/tsconfig": "*",
     "@types/better-sqlite3": "^7.6.0"
   }
 }

@@ -6,7 +6,7 @@ import type {
 	RelayProvider,
 	TransactionHash,
 	TransactionStatus,
-} from "@pas/types";
+} from "@peekaboopay/types";
 
 export class RelayClient implements RelayProvider {
 	readonly chainId: ChainId;

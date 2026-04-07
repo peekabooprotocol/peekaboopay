@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import Database from "better-sqlite3";
 import { SqliteSessionStore } from "../sqlite-session-store";
-import type { Session } from "@pas/types";
-import { PrivacyLevel, SessionState } from "@pas/types";
+import type { Session } from "@peekaboopay/types";
+import { PrivacyLevel, SessionState } from "@peekaboopay/types";
 
 function makeSession(overrides: Partial<Session> = {}): Session {
 	return {

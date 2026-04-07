@@ -1,5 +1,5 @@
 {
-  "name": "@pas/adapter-aztec",
+  "name": "@peekaboopay/adapter-aztec",
   "version": "0.1.0",
   "description": "Aztec privacy backend adapter — programmable privacy with private smart contracts",
   "type": "module",
@@ -20,9 +20,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*"
+    "@peekaboopay/types": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

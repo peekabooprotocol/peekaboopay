@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { SessionManagerImpl } from "../session-manager";
-import { PrivacyLevel, SessionState } from "@pas/types";
-import type { SessionConfig } from "@pas/types";
+import { PrivacyLevel, SessionState } from "@peekaboopay/types";
+import type { SessionConfig } from "@peekaboopay/types";
 
 const makeConfig = (
 	overrides: Partial<SessionConfig> = {},

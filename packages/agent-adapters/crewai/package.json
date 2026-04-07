@@ -1,5 +1,5 @@
 {
-  "name": "@pas/agent-crewai",
+  "name": "@peekaboopay/agent-crewai",
   "version": "0.1.0",
   "description": "CrewAI tool wrappers for PAS SDK",
   "type": "module",
@@ -20,10 +20,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*",
-    "@pas/sdk": "*"
+    "@peekaboopay/types": "*",
+    "@peekaboopay/sdk": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

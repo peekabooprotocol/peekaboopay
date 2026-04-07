@@ -13,7 +13,7 @@ import type {
 	TransferResult,
 	UnshieldParams,
 	UnshieldResult,
-} from "@pas/types";
+} from "@peekaboopay/types";
 
 /**
  * Native Ethereum privacy adapter.

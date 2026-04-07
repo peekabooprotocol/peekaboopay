@@ -1,5 +1,5 @@
 import type Database from "better-sqlite3";
-import type { PolicyRule, PolicyStore, SpendRecord } from "@pas/types";
+import type { PolicyRule, PolicyStore, SpendRecord } from "@peekaboopay/types";
 import {
 	deserializeBigIntFields,
 	serializeBigIntFields,

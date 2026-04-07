@@ -1,4 +1,4 @@
-import type { ChainId, ChainType } from "@pas/types";
+import type { ChainId, ChainType } from "@peekaboopay/types";
 
 export interface ChainConfig {
 	chainId: ChainId;

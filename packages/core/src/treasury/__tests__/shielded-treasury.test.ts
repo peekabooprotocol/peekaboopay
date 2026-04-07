@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { ShieldedTreasuryImpl } from "../shielded-treasury";
-import type { Address, Hex, TokenInfo, UTXONote } from "@pas/types";
+import type { Address, Hex, TokenInfo, UTXONote } from "@peekaboopay/types";
 
 const USDC: TokenInfo = {
 	address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" as Address,

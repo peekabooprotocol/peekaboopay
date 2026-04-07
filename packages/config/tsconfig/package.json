@@ -1,5 +1,5 @@
 {
-  "name": "@pas/tsconfig",
+  "name": "@peekaboopay/tsconfig",
   "version": "0.0.0",
   "private": true,
   "files": ["base.json", "library.json", "app.json"]

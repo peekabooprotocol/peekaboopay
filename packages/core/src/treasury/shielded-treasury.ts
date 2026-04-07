@@ -7,7 +7,7 @@ import type {
 	TreasuryEvent,
 	TreasuryStore,
 	UTXONote,
-} from "@pas/types";
+} from "@peekaboopay/types";
 import { InMemoryTreasuryStore } from "./in-memory-treasury-store";
 
 export class ShieldedTreasuryImpl implements ShieldedTreasury {

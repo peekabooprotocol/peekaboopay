@@ -1,0 +1,29 @@
+{
+  "name": "@peekaboopay/x402",
+  "version": "0.1.0",
+  "description": "x402 'shielded' payment scheme — private HTTP-native payments via Peek-a-boo",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}

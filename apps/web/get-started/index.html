@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started — Peek-a-boo Protocol</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg:      #04030a;
+  --bg2:     #060511;
+  --surface: #0c0b1a;
+  --faint:   rgba(255,255,255,0.055);
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(0,229,180,0.22);
+  --mint:    #00e5b4;
+  --violet:  #7b6bff;
+  --pink:    #ff3d6b;
+  --text:    #ede9ff;
+  --muted:   #6b6585;
+  --body:    #a8a0be;
+  --dimmed:  #2d2847;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none;
+}
+/* noise layer */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 9000;
+}
+/* ── COSMIC NEBULA BACKGROUND ── */
+.nebula {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.neb-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0;
+  animation: nebFloat 18s ease-in-out infinite;
+}
+.neb-orb:nth-child(1) {
+  width: 800px; height: 600px;
+  top: -15%; left: -10%;
+  background: radial-gradient(ellipse, rgba(82,60,180,0.28) 0%, transparent 68%);
+  animation-delay: 0s;
+}
+.neb-orb:nth-child(2) {
+  width: 700px; height: 500px;
+  top: 30%; right: -15%;
+  background: radial-gradient(ellipse, rgba(0,180,140,0.15) 0%, transparent 65%);
+  animation-delay: -6s;
+}
+.neb-orb:nth-child(3) {
+  width: 550px; height: 450px;
+  bottom: -10%; left: 20%;
+  background: radial-gradient(ellipse, rgba(100,60,200,0.20) 0%, transparent 65%);
+  animation-delay: -12s;
+}
+@keyframes nebFloat {
+  0%,100% { opacity: 1; transform: translateY(0) scale(1); }
+  50%      { opacity: 1; transform: translateY(-30px) scale(1.04); }
+}
+/* ── CURSOR ── */
+.cursor { width: 7px; height: 7px; background: var(--mint); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+.cursor-ring { width: 28px; height: 28px; border: 1px solid rgba(0,229,180,0.3); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.15s ease, border-color 0.2s; }
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background 0.4s, border-color 0.4s;
+  border-bottom: 1px solid transparent;
+  background: rgba(12,11,26,0.5); backdrop-filter: blur(10px);
+}
+nav.scrolled { background: rgba(12,11,26,0.85); backdrop-filter: blur(18px); border-color: var(--border); }
+.nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.6rem; }
+.nav-logo .a { color: var(--mint); }
+.nav-logo-icon { width: 28px; height: 28px; flex-shrink: 0; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--mint); }
+.nav-cta { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.55rem 1.25rem; border: 1px solid var(--border2); color: var(--mint); text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: rgba(0,229,180,0.08); }
+.nav-cta.active { background: rgba(0,229,180,0.12); }
+/* ── BUTTONS ── */
+.btn { display: inline-block; font-family: 'DM Mono', monospace; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase; text-decoration: none; padding: 0.85rem 2rem; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s, color 0.2s; }
+.btn-fill { background: var(--mint); color: #04030a; }
+.btn-fill:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,229,180,0.2); }
+.btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: rgba(255,255,255,0.25); }
+/* ── SECTIONS ── */
+.section { position: relative; z-index: 1; }
+.sep { border: none; border-top: 1px solid var(--border); }
+.eyebrow { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+.h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(2.4rem, 5vw, 4rem); line-height: 0.97; letter-spacing: -0.04em; }
+.h2 em { font-style: normal; color: var(--mint); }
+.lead { margin-top: 1.5rem; font-size: 0.82rem; line-height: 1.9; color: var(--body); max-width: 48ch; }
+/* reveal */
+.r { opacity:0; transform:translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.r.v { opacity:1; transform:none; }
+/* ── TUTORIAL LAYOUT ── */
+.tutorial { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 6rem 3rem 4rem; }
+.tutorial-hero { margin-bottom: 4rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.tutorial-hero-eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.tutorial-hero-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.25rem;
+}
+.tutorial-hero-title em { font-style: normal; color: var(--mint); }
+.tutorial-hero-sub {
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 56ch;
+}
+/* ── STEPS ── */
+.step { margin-bottom: 4rem; scroll-margin-top: 6rem; }
+.step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.step-num { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 2rem; color: var(--mint); line-height: 1; min-width: 2.5rem; }
+.step-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em; }
+.step-desc { font-size: 0.8rem; line-height: 1.9; color: var(--body); margin-bottom: 1.25rem; max-width: 68ch; }
+.step-desc strong { color: var(--text); font-weight: 400; }
+.step-desc code { color: var(--mint); background: rgba(0,229,180,0.06); padding: 0.15rem 0.4rem; font-size: 0.7rem; border: 1px solid rgba(0,229,180,0.1); }
+/* ── SECTION TITLES (non-numbered) ── */
+.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+.section-title em { font-style: normal; color: var(--mint); }
+/* ── CODE BLOCKS ── */
+.code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem 0 1.5rem;
+  overflow-x: auto;
+  font-size: 0.68rem;
+  line-height: 1.8;
+  color: var(--muted);
+  position: relative;
+}
+.code-block .kw { color: var(--violet); }
+.code-block .fn { color: var(--mint); }
+.code-block .str { color: #ffa657; }
+.code-block .cmt { color: var(--dimmed); font-style: italic; }
+.code-label {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dimmed);
+}
+/* ── INFO CARD ── */
+.info-card { border: 1px solid var(--border); background: var(--surface); padding: 1.5rem 1.75rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+.info-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: var(--mint); }
+.info-card-label { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mint); margin-bottom: 0.6rem; }
+.info-card p { font-size: 0.78rem; line-height: 1.85; color: var(--body); }
+.info-card code { color: var(--mint); background: rgba(0,229,180,0.06); padding: 0.1rem 0.35rem; font-size: 0.68rem; border: 1px solid rgba(0,229,180,0.1); }
+/* ── DOC TABLE ── */
+.doc-table { width: 100%; margin: 1.25rem 0 1.5rem; border-collapse: collapse; font-size: 0.72rem; }
+.doc-table th { text-align: left; font-weight: 400; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: var(--surface); }
+.doc-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--faint); color: var(--muted); line-height: 1.7; }
+.doc-table td:first-child { color: var(--text); }
+.doc-table code { color: var(--mint); font-size: 0.68rem; }
+/* ── CHIPS ── */
+.chip-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 1.5rem; }
+.chip { display: inline-block; font-size: 0.62rem; letter-spacing: 0.06em; padding: 0.3rem 0.65rem; border: 1px solid rgba(0,229,180,0.18); color: var(--mint); background: rgba(0,229,180,0.04); }
+/* ── HOW CARDS (next steps) ── */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 2rem; }
+.how-card {
+  background: var(--bg);
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column; gap: 1rem;
+  position: relative; overflow: hidden;
+  transition: background 0.3s;
+  text-decoration: none;
+}
+.how-card::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, rgba(0,229,180,0.03) 0%, transparent 60%); opacity:0; transition: opacity 0.3s; }
+.how-card:hover { background: var(--bg2); }
+.how-card:hover::before { opacity:1; }
+.how-card-num { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; color: var(--dimmed); }
+.how-card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; color: var(--text); }
+.how-card-body { font-size: 0.78rem; line-height: 1.85; color: var(--body); flex: 1; }
+.how-card-arrow { font-size: 0.7rem; color: var(--mint); align-self: flex-end; transition: transform 0.2s; }
+.how-card:hover .how-card-arrow { transform: translateX(4px); }
+/* ── FOOTER ── */
+footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 4rem 3rem 2.5rem; }
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
+.footer-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); margin-bottom: 0.75rem; }
+.footer-tagline { font-size: 0.67rem; color: var(--muted); line-height: 1.7; max-width: 28ch; }
+.footer-cols { display: flex; gap: 5rem; }
+.footer-col-title { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-col a { font-size: 0.72rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bot { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--faint); font-size: 0.62rem; color: var(--dimmed); }
+.footer-socials { display: flex; gap: 1.5rem; }
+.footer-socials a { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-socials a:hover { color: var(--text); }
+/* ── PARTICLE CANVAS ── */
+.particle-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* ── SCROLL TEXT REVEAL ── */
+.reveal-text .word {
+  display: inline-block;
+  opacity: 0.12;
+  transition: opacity 0.5s ease;
+}
+.reveal-text .word.lit {
+  opacity: 1;
+}
+/* ── RESPONSIVE ── */
+@media (max-width: 920px) {
+  nav { padding: 1rem 1.5rem; }
+  .tutorial { padding: 5rem 1.5rem 3rem; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .footer-top { flex-direction: column; gap: 2.5rem; }
+  .footer-cols { gap: 3rem; }
+  .doc-table { font-size: 0.65rem; }
+  .doc-table th, .doc-table td { padding: 0.5rem 0.6rem; }
+  .step-num { font-size: 1.5rem; }
+  .step-title { font-size: 1.1rem; }
+  .code-block { font-size: 0.6rem; padding: 1rem 1rem; }
+}
+</style>
+</head>
+<body>
+<canvas class="particle-canvas" id="particles"></canvas>
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="nebula">
+  <div class="neb-orb"></div>
+  <div class="neb-orb"></div>
+  <div class="neb-orb"></div>
+</div>
+<nav id="nav">
+  <a href="/" class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" stroke-width="1.5"/>
+      <circle cx="40" cy="40" r="12" fill="#00a884"/>
+      <circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" stroke-width="2"/>
+      <circle cx="40" cy="40" r="4" fill="#060614"/>
+    </svg>
+    peek<span class="a">—</span>a<span class="a">—</span>boo
+  </a>
+  <ul class="nav-links">
+    <li><a href="/#payments">Payments</a></li>
+    <li><a href="/bittensor/">Bittensor</a></li>
+    <li><a href="/#stack">Stack</a></li>
+    <li><a href="/docs/">Docs</a></li>
+    <li><a href="/get-started/" class="nav-cta active">Get Started</a></li>
+  </ul>
+</nav>
+
+<main class="tutorial">
+  <!-- HERO -->
+  <div class="tutorial-hero r">
+    <div class="tutorial-hero-eyebrow">Tutorial</div>
+    <h1 class="tutorial-hero-title">Get started with <em>Peek-a-boo</em></h1>
+    <p class="tutorial-hero-sub">Private payments on any EVM chain in under 5 minutes. Follow along step-by-step — from install to your first shielded transaction.</p>
+  </div>
+
+  <!-- STEP 1: Install -->
+  <div class="step r" id="step-1">
+    <div class="step-header">
+      <span class="step-num">1</span>
+      <span class="step-title">Install the SDK</span>
+    </div>
+    <p class="step-desc">Install the Peek-a-boo SDK and your preferred chain adapter. The SDK provides a unified privacy interface — the adapter handles chain-specific operations.</p>
+    <div class="code-block">
+      <span class="code-label">Bittensor</span>
+<span class="fn">npm</span> <span class="kw">install</span> <span class="str">@peekaboopay/sdk</span> <span class="str">@peekaboopay/adapter-bittensor</span>
+    </div>
+    <div class="code-block">
+      <span class="code-label">Ethereum / Railgun</span>
+<span class="fn">npm</span> <span class="kw">install</span> <span class="str">@peekaboopay/sdk</span> <span class="str">@peekaboopay/adapter-railgun</span>
+    </div>
+    <div class="info-card">
+      <div class="info-card-label">Supported Chains</div>
+      <p>Peek-a-boo supports Bittensor EVM (chain <code>964</code>), Ethereum, BSC, Polygon, and Arbitrum. Choose the adapter that matches your target chain.</p>
+    </div>
+  </div>
+
+  <!-- STEP 2: Initialize -->
+  <div class="step r" id="step-2" style="transition-delay:0.08s">
+    <div class="step-header">
+      <span class="step-num">2</span>
+      <span class="step-title">Connect to a chain</span>
+    </div>
+    <p class="step-desc">Create a privacy backend and initialize the SDK client. The adapter handles RPC connection, contract discovery, and Merkle tree synchronization.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">import</span> { <span class="fn">PASClient</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/sdk"</span>;
+<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/adapter-bittensor"</span>;
+
+<span class="cmt">// Create the privacy backend</span>
+<span class="kw">const</span> adapter = <span class="kw">new</span> <span class="fn">BittensorAdapter</span>();
+<span class="kw">await</span> adapter.<span class="fn">initialize</span>({
+  chainId: <span class="str">964</span>,
+  rpcUrl: <span class="str">"https://lite.chain.opentensor.ai"</span>,
+  privateKey: <span class="str">"0x..."</span>,  <span class="cmt">// your wallet private key</span>
+  artifactsPath: <span class="str">"./circuits/build"</span>,
+});
+
+<span class="cmt">// Create the SDK client</span>
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">PASClient</span>(adapter);
+<span class="kw">await</span> client.<span class="fn">connect</span>({
+  agentId: <span class="str">"my-agent"</span>,
+  privacyLevel: <span class="str">"FULL"</span>,
+});
+    </div>
+  </div>
+
+  <!-- STEP 3: Shield -->
+  <div class="step r" id="step-3" style="transition-delay:0.08s">
+    <div class="step-header">
+      <span class="step-num">3</span>
+      <span class="step-title">Shield your tokens</span>
+    </div>
+    <p class="step-desc">Deposit tokens into the shielded pool. A Poseidon commitment is inserted into the on-chain Merkle tree. Your identity stays off-chain — only you hold the nullifier and secret needed to withdraw.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">const</span> result = <span class="kw">await</span> client.<span class="fn">pay</span>({
+  token: {
+    address: <span class="str">"0x0000000000000000000000000000000000000000"</span>,
+    symbol: <span class="str">"TAO"</span>,
+    decimals: <span class="str">18</span>,
+    chainId: <span class="str">964</span>,
+  },
+  amount: <span class="str">1000000000000000000n</span>, <span class="cmt">// 1 TAO</span>
+  recipient: <span class="str">"0x..."</span>,
+});
+
+<span class="kw">if</span> (result.success) {
+  console.<span class="fn">log</span>(<span class="str">"Shielded:"</span>, result.data.txHash);
+  console.<span class="fn">log</span>(<span class="str">"UTXO index:"</span>, result.data.utxo.index);
+}
+    </div>
+    <div class="info-card">
+      <div class="info-card-label">What happens on-chain</div>
+      <p>Your TAO enters the ShieldedPool contract. A commitment = <code>Poseidon(nullifier, secret)</code> is inserted into the Merkle tree. The deposit event is emitted, but nothing links it to your future withdrawal.</p>
+    </div>
+  </div>
+
+  <!-- STEP 4: Send Privately -->
+  <div class="step r" id="step-4" style="transition-delay:0.08s">
+    <div class="step-header">
+      <span class="step-num">4</span>
+      <span class="step-title">Send a private payment</span>
+    </div>
+    <p class="step-desc">Transfer tokens to a recipient using a stealth address. The recipient gets a one-time ERC-5564 address — no public linkability between sender and receiver.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">const</span> transfer = <span class="kw">await</span> adapter.<span class="fn">transfer</span>({
+  token: { address: <span class="str">"0x0..."</span>, symbol: <span class="str">"TAO"</span>, decimals: <span class="str">18</span>, chainId: <span class="str">964</span> },
+  amount: <span class="str">500000000000000000n</span>, <span class="cmt">// 0.5 TAO</span>
+  recipientPublicKey: <span class="str">"0x04..."</span>, <span class="cmt">// recipient's secp256k1 public key</span>
+  memo: <span class="str">"payment for inference"</span>,
+});
+
+<span class="kw">if</span> (transfer.success) {
+  console.<span class="fn">log</span>(<span class="str">"Nullifier:"</span>, transfer.data.nullifier);
+  console.<span class="fn">log</span>(<span class="str">"Stealth address used — unlinkable on-chain"</span>);
+}
+    </div>
+  </div>
+
+  <!-- STEP 5: Check Balance -->
+  <div class="step r" id="step-5" style="transition-delay:0.08s">
+    <div class="step-header">
+      <span class="step-num">5</span>
+      <span class="step-title">Query shielded balance</span>
+    </div>
+    <p class="step-desc">Check your balance inside the shielded pool. This is computed locally from your UTXO notes — never exposed on-chain.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">const</span> balance = <span class="kw">await</span> adapter.<span class="fn">getShieldedBalance</span>(
+  { address: <span class="str">"0x0..."</span>, symbol: <span class="str">"TAO"</span>, decimals: <span class="str">18</span>, chainId: <span class="str">964</span> },
+  <span class="str">"0x..."</span> <span class="cmt">// your viewing key</span>
+);
+
+console.<span class="fn">log</span>(<span class="str">"Shielded balance:"</span>, balance, <span class="str">"wei"</span>);
+    </div>
+  </div>
+
+  <!-- STEP 6: Unshield -->
+  <div class="step r" id="step-6" style="transition-delay:0.08s">
+    <div class="step-header">
+      <span class="step-num">6</span>
+      <span class="step-title">Withdraw to a public address</span>
+    </div>
+    <p class="step-desc">When you're ready to exit the shielded pool, generate a Groth16 ZK proof and withdraw. The proof demonstrates you own funds in the pool without revealing which deposit was yours.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">const</span> withdrawal = <span class="kw">await</span> adapter.<span class="fn">unshield</span>({
+  token: { address: <span class="str">"0x0..."</span>, symbol: <span class="str">"TAO"</span>, decimals: <span class="str">18</span>, chainId: <span class="str">964</span> },
+  amount: <span class="str">500000000000000000n</span>,
+  recipient: <span class="str">"0xYourPublicAddress"</span>,
+  proof: { protocol: <span class="str">"groth16"</span>, proof: <span class="str">"0x..."</span>, publicInputs: [] },
+});
+
+<span class="kw">if</span> (withdrawal.success) {
+  console.<span class="fn">log</span>(<span class="str">"Withdrawn:"</span>, withdrawal.data.txHash);
+}
+    </div>
+  </div>
+
+  <!-- SECTION: For AI Agents -->
+  <hr class="sep" style="margin-bottom:4rem">
+  <div class="step r" id="agents">
+    <h2 class="section-title">For AI <em>Agents</em></h2>
+    <p class="step-desc">Peek-a-boo exposes all privacy operations as MCP tools. Any MCP-compatible agent can call shield, transfer, and prove as native tool calls.</p>
+    <div class="code-block">
+      <span class="code-label">MCP Tool Call</span>
+{
+  <span class="str">"tool"</span>: <span class="str">"pas_pay"</span>,
+  <span class="str">"arguments"</span>: {
+    <span class="str">"recipient"</span>: <span class="str">"0x..."</span>,
+    <span class="str">"amount"</span>: <span class="str">"1000000000000000000"</span>,
+    <span class="str">"token"</span>: <span class="str">"TAO"</span>,
+    <span class="str">"memo"</span>: <span class="str">"inference payment"</span>
+  }
+}
+    </div>
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th>Tool</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>pas_pay</code></td>
+          <td>Send a shielded payment</td>
+        </tr>
+        <tr>
+          <td><code>pas_receive</code></td>
+          <td>Generate a stealth receive address</td>
+        </tr>
+        <tr>
+          <td><code>pas_get_balance</code></td>
+          <td>Query shielded balance</td>
+        </tr>
+        <tr>
+          <td><code>pas_shield_funds</code></td>
+          <td>Deposit into shielded pool</td>
+        </tr>
+        <tr>
+          <td><code>pas_unshield_funds</code></td>
+          <td>Withdraw from shielded pool</td>
+        </tr>
+        <tr>
+          <td><code>pas_prove</code></td>
+          <td>Generate a ZK proof</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION: x402 Payments -->
+  <hr class="sep" style="margin-bottom:4rem">
+  <div class="step r" id="x402">
+    <h2 class="section-title">HTTP-Native Payments with <em>x402</em></h2>
+    <p class="step-desc">Peek-a-boo supports the x402 payment protocol — private payments triggered by HTTP 402 responses. Your agent automatically handles payment negotiation.</p>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/x402"</span>;
+
+<span class="kw">const</span> shieldedFetch = <span class="fn">createShieldedFetch</span>({
+  pay: <span class="kw">async</span> (params) => {
+    <span class="cmt">// Route payment through the shielded pool</span>
+    <span class="kw">return</span> adapter.<span class="fn">transfer</span>(params);
+  }
+});
+
+<span class="cmt">// Use like normal fetch — payments happen automatically</span>
+<span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">shieldedFetch</span>(<span class="str">"https://api.example.com/data"</span>);
+<span class="cmt">// Agent gets 402 → shielded payment → 200 OK</span>
+    </div>
+  </div>
+
+  <!-- SECTION: What's Next -->
+  <hr class="sep" style="margin-bottom:4rem">
+  <div class="r" id="next">
+    <h2 class="section-title">What's <em>next?</em></h2>
+    <div class="cards-grid">
+      <a href="/docs/" class="how-card">
+        <div class="how-card-num">— 01</div>
+        <div class="how-card-title">Documentation</div>
+        <div class="how-card-body">Full API reference, architecture guide, and SDK documentation.</div>
+        <div class="how-card-arrow">&rarr;</div>
+      </a>
+      <a href="/bittensor/" class="how-card">
+        <div class="how-card-num">— 02</div>
+        <div class="how-card-title">Bittensor</div>
+        <div class="how-card-body">Deployed contracts, chain details, and inference privacy.</div>
+        <div class="how-card-arrow">&rarr;</div>
+      </a>
+      <a href="https://github.com" target="_blank" class="how-card">
+        <div class="how-card-num">— 03</div>
+        <div class="how-card-title">Source Code</div>
+        <div class="how-card-body">Open source. 18 packages. 282 tests. MIT licensed.</div>
+        <div class="how-card-arrow">&rarr;</div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">peek<span style="color:var(--mint)">—</span>a<span style="color:var(--mint)">—</span>boo</div>
+        <div class="footer-tagline">Private payments for web3. Shield. Send. Prove.</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul>
+            <li><a href="/">Payments</a></li>
+            <li><a href="/bittensor/">Bittensor</a></li>
+            <li><a href="/#stack">Stack</a></li>
+            <li><a href="/docs/">Docs</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul>
+            <li><a href="https://github.com" target="_blank">GitHub</a></li>
+            <li><a href="/docs/">Docs</a></li>
+            <li><a href="/get-started/">Get Started</a></li>
+            <li><a href="https://discord.gg" target="_blank">Discord</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Chains</div>
+          <ul>
+            <li><a href="#">Bittensor EVM</a></li>
+            <li><a href="#">Railgun</a></li>
+            <li><a href="#">Ethereum L2</a></li>
+            <li><a href="#">Aztec</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>&copy; 2026 Peek-a-boo</span>
+      <div class="footer-socials">
+        <a href="https://github.com" target="_blank">GitHub</a>
+        <a href="https://discord.gg" target="_blank">Discord</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+(function() {
+  /* ── CURSOR ── */
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('ring');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function loop(){ rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ ring.style.transform='translate(-50%,-50%) scale(1.65)'; ring.style.borderColor='rgba(0,229,180,0.65)'; });
+    el.addEventListener('mouseleave',()=>{ ring.style.transform='translate(-50%,-50%) scale(1)'; ring.style.borderColor='rgba(0,229,180,0.3)'; });
+  });
+
+  /* ── NAV SCROLL ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{ nav.classList.toggle('scrolled', window.scrollY>60); }, {passive:true});
+
+  /* ── SCROLL REVEAL ── */
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('v'); });
+  }, {threshold:0.1});
+  document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+  /* ── PARTICLES ── */
+  (function(){
+    const c = document.getElementById('particles');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let w, h, pts = [];
+    function resize(){ w=c.width=window.innerWidth; h=c.height=window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    for(let i=0;i<80;i++){
+      pts.push({
+        x: Math.random()*w, y: Math.random()*h,
+        vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+        s: Math.random()*2+0.5, a: Math.random()*0.5+0.15
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      for(const p of pts){
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0)p.x=w; if(p.x>w)p.x=0;
+        if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+        ctx.fillStyle='rgba(0,229,180,'+p.a+')';
+        ctx.fillRect(p.x, p.y, p.s, p.s);
+      }
+      const scrollFade = Math.max(0, 1 - window.scrollY / (window.innerHeight * 1.2));
+      c.style.opacity = scrollFade;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ── SCROLL TEXT REVEAL ── */
+  (function(){
+    function wrapWords(node) {
+      const frag = document.createDocumentFragment();
+      node.childNodes.forEach(child => {
+        if (child.nodeType === 3) {
+          const parts = child.textContent.split(/(\s+)/);
+          parts.forEach(p => {
+            if (/^\s+$/.test(p) || p === '') {
+              frag.appendChild(document.createTextNode(p));
+            } else {
+              const span = document.createElement('span');
+              span.className = 'word';
+              span.textContent = p;
+              frag.appendChild(span);
+            }
+          });
+        } else if (child.nodeType === 1) {
+          if (child.tagName === 'BR') {
+            frag.appendChild(child.cloneNode());
+          } else {
+            const clone = child.cloneNode(false);
+            wrapWords(child).childNodes.forEach(c => clone.appendChild(c.cloneNode(true)));
+            frag.appendChild(clone);
+          }
+        }
+      });
+      return frag;
+    }
+    document.querySelectorAll('.h2, .lead, .section-title').forEach(el => {
+      if(el.dataset.noReveal) return;
+      const frag = wrapWords(el);
+      el.innerHTML = '';
+      el.appendChild(frag);
+      el.classList.add('reveal-text');
+    });
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const words = entry.target.querySelectorAll('.word');
+          words.forEach((w,i) => {
+            setTimeout(() => w.classList.add('lit'), i * 40);
+          });
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.reveal-text').forEach(el => revealObs.observe(el));
+  })();
+})();
+</script>
+</body>
+</html>

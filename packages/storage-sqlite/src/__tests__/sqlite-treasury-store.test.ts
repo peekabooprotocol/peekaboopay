@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import Database from "better-sqlite3";
 import { SqliteTreasuryStore } from "../sqlite-treasury-store";
-import type { Hex, UTXONote, TokenInfo, TreasuryEvent } from "@pas/types";
+import type { Hex, UTXONote, TokenInfo, TreasuryEvent } from "@peekaboopay/types";
 
 const ETH: TokenInfo = {
 	address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" as Hex,

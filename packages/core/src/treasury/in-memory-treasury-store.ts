@@ -4,7 +4,7 @@ import type {
 	TreasuryEvent,
 	TreasuryStore,
 	UTXONote,
-} from "@pas/types";
+} from "@peekaboopay/types";
 
 /**
  * In-memory implementation of TreasuryStore.

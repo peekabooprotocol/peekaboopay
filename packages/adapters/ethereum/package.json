@@ -1,5 +1,5 @@
 {
-  "name": "@pas/adapter-ethereum",
+  "name": "@peekaboopay/adapter-ethereum",
   "version": "0.1.0",
   "description": "Native Ethereum privacy adapter — future native shielded ETH support",
   "type": "module",
@@ -20,9 +20,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*"
+    "@peekaboopay/types": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

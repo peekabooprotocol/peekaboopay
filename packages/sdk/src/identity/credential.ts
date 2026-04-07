@@ -1,5 +1,5 @@
-import type { Credential, PASResult } from "@pas/types";
-import type { PASEngine } from "@pas/core";
+import type { Credential, PASResult } from "@peekaboopay/types";
+import type { PASEngine } from "@peekaboopay/core";
 
 export async function storeCredential(
 	_engine: PASEngine,

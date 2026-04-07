@@ -5,7 +5,7 @@ import type {
 	AddressDerivation,
 	StealthAddressResult,
 	StealthAnnouncement,
-} from "@pas/types";
+} from "@peekaboopay/types";
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { keccak_256 } from "@noble/hashes/sha3";
 

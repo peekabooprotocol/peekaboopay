@@ -1,0 +1,31 @@
+{
+  "name": "@peekaboopay/adapter-bittensor",
+  "version": "0.1.0",
+  "description": "Bittensor EVM privacy adapter — shielded TAO transactions via Subtensor EVM",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "@peekaboopay/crypto": "*",
+    "@peekaboopay/core": "*",
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}

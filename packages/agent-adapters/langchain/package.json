@@ -1,5 +1,5 @@
 {
-  "name": "@pas/agent-langchain",
+  "name": "@peekaboopay/agent-langchain",
   "version": "0.1.0",
   "description": "LangChain tool wrappers for PAS SDK",
   "type": "module",
@@ -20,11 +20,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*",
-    "@pas/sdk": "*"
+    "@peekaboopay/types": "*",
+    "@peekaboopay/sdk": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   },
   "peerDependencies": {
     "@langchain/core": ">=0.3.0"

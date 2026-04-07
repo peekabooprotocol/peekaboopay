@@ -1,5 +1,5 @@
-import type { Session, SessionStore } from "@pas/types";
-import { SessionState } from "@pas/types";
+import type { Session, SessionStore } from "@peekaboopay/types";
+import { SessionState } from "@peekaboopay/types";
 
 /**
  * In-memory implementation of SessionStore.

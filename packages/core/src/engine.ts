@@ -4,7 +4,7 @@ import type {
 	PrivacyBackend,
 	SessionStore,
 	TreasuryStore,
-} from "@pas/types";
+} from "@peekaboopay/types";
 import { AddressDerivationImpl, CredentialVaultImpl } from "./identity";
 import { PolicyEngineImpl } from "./policy";
 import { SessionManagerImpl } from "./session";

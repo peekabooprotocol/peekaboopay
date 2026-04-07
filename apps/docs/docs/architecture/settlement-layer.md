@@ -14,4 +14,4 @@ The bottom layer where proofs land and value moves.
 
 ## Package
 
-`@pas/settlement` — provides `EthereumL1Provider`, `RelayClient`, and chain registry.
+`@peekaboopay/settlement` — provides `EthereumL1Provider`, `RelayClient`, and chain registry.

@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # PAS SDK
 
-The universal interface — `npm install @pas/sdk`.
+The universal interface — `npm install @peekaboopay/sdk`.
 
 ## APIs
 
@@ -24,4 +24,4 @@ The universal interface — `npm install @pas/sdk`.
 
 ## Package
 
-`@pas/sdk` — provides `PASClient` which composes the Core Engine with settlement and privacy adapters.
+`@peekaboopay/sdk` — provides `PASClient` which composes the Core Engine with settlement and privacy adapters.

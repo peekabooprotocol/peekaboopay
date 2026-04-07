@@ -16,11 +16,11 @@ sidebar_position: 1
 ## Quick Install
 
 ```bash
-npm install @pas/sdk
+npm install @peekaboopay/sdk
 ```
 
 ```typescript
-import { PASClient } from "@pas/sdk";
+import { PASClient } from "@peekaboopay/sdk";
 
 const pas = new PASClient(backend);
 await pas.connect(config);

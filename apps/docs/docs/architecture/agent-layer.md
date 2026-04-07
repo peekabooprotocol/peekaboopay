@@ -14,7 +14,7 @@ Any framework, any model.
 
 ## Integration Options
 
-1. **MCP Server** (`@pas/mcp-server`) — Any MCP-compatible agent discovers PAS tools automatically
-2. **LangChain Adapter** (`@pas/agent-langchain`) — LangChain Tool wrappers
-3. **CrewAI Adapter** (`@pas/agent-crewai`) — CrewAI tool wrappers
-4. **Direct SDK** (`@pas/sdk`) — Use `PASClient` directly in any TypeScript agent
+1. **MCP Server** (`@peekaboopay/mcp-server`) — Any MCP-compatible agent discovers PAS tools automatically
+2. **LangChain Adapter** (`@peekaboopay/agent-langchain`) — LangChain Tool wrappers
+3. **CrewAI Adapter** (`@peekaboopay/agent-crewai`) — CrewAI tool wrappers
+4. **Direct SDK** (`@peekaboopay/sdk`) — Use `PASClient` directly in any TypeScript agent

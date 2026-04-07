@@ -1,5 +1,5 @@
 {
-  "name": "@pas/adapter-railgun",
+  "name": "@peekaboopay/adapter-railgun",
   "version": "0.1.0",
   "description": "Railgun privacy backend adapter — shielded ERC-20 via ZK-SNARKs",
   "type": "module",
@@ -20,9 +20,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*"
+    "@peekaboopay/types": "*",
+    "@railgun-community/wallet": "^10.8.1",
+    "@railgun-community/shared-models": "^7.6.1",
+    "ethers": "^6.16.0",
+    "snarkjs": "^0.7.6"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

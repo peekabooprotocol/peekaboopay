@@ -1,5 +1,5 @@
-import type { DisclosureRequest, PASResult, Proof } from "@pas/types";
-import type { PASEngine } from "@pas/core";
+import type { DisclosureRequest, PASResult, Proof } from "@peekaboopay/types";
+import type { PASEngine } from "@peekaboopay/core";
 
 export async function prove(
 	_engine: PASEngine,

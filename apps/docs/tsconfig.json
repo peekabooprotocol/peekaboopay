@@ -1,5 +1,5 @@
 {
-  "extends": "@pas/tsconfig/app.json",
+  "extends": "@peekaboopay/tsconfig/app.json",
   "compilerOptions": {
     "baseUrl": ".",
     "jsx": "react-jsx"

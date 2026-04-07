@@ -1,5 +1,5 @@
-import type { Session, SessionConfig, SessionManager, SessionStore } from "@pas/types";
-import { SessionState } from "@pas/types";
+import type { Session, SessionConfig, SessionManager, SessionStore } from "@peekaboopay/types";
+import { SessionState } from "@peekaboopay/types";
 import { InMemorySessionStore } from "./in-memory-session-store";
 
 /** Generate a v4-style UUID without depending on node:crypto types */

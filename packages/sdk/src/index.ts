@@ -15,4 +15,4 @@ export type {
 	PolicyRule,
 	PASResult,
 	AgentConfig,
-} from "@pas/types";
+} from "@peekaboopay/types";

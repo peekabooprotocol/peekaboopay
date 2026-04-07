@@ -1,5 +1,5 @@
 {
-  "extends": "@pas/tsconfig/library.json",
+  "extends": "@peekaboopay/tsconfig/library.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

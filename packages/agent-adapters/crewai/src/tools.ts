@@ -1,4 +1,4 @@
-import type { PASClient } from "@pas/sdk";
+import type { PASClient } from "@peekaboopay/sdk";
 
 /**
  * Creates CrewAI-compatible tool definitions from a PASClient instance.

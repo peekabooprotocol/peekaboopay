@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import Database from "better-sqlite3";
 import { SqlitePolicyStore } from "../sqlite-policy-store";
-import type { Hex, PolicyRule, SpendLimitRule, WhitelistRule, TimeBoundRule, ChainRestrictionRule } from "@pas/types";
+import type { Hex, PolicyRule, SpendLimitRule, WhitelistRule, TimeBoundRule, ChainRestrictionRule } from "@peekaboopay/types";
 
 describe("SqlitePolicyStore", () => {
 	let db: Database.Database;

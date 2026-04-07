@@ -1,5 +1,5 @@
 {
-  "name": "@pas/types",
+  "name": "@peekaboopay/types",
   "version": "0.1.0",
   "description": "Shared type definitions for the Private Agent Shell",
   "type": "module",
@@ -19,6 +19,6 @@
     "dev": "tsup --watch"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

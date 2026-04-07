@@ -1,5 +1,5 @@
 {
-  "name": "@pas/settlement",
+  "name": "@peekaboopay/settlement",
   "version": "0.1.0",
   "description": "Settlement layer — L1/L2 providers and gasless relay",
   "type": "module",
@@ -20,9 +20,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@pas/types": "*"
+    "@peekaboopay/types": "*"
   },
   "devDependencies": {
-    "@pas/tsconfig": "*"
+    "@peekaboopay/tsconfig": "*"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@pas/contracts",
+  "name": "@peekaboopay/contracts",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -32,6 +32,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@peekaboopay/crypto": "*",
     "circomlib": "^2.0.5",
     "circomlibjs": "^0.1.7",
     "poseidon-solidity": "^0.0.5",

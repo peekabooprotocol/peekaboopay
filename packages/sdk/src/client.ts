@@ -13,9 +13,9 @@ import type {
 	ReceiveParams,
 	SwapParams,
 	SwapReceipt,
-} from "@pas/types";
-import { PASEngine } from "@pas/core";
-import type { PrivacyBackend } from "@pas/types";
+} from "@peekaboopay/types";
+import { PASEngine } from "@peekaboopay/core";
+import type { PrivacyBackend } from "@peekaboopay/types";
 import { pay } from "./transaction/pay";
 import { receive } from "./transaction/receive";
 import { swap } from "./transaction/swap";
@@ -26,7 +26,7 @@ import { disclose } from "./identity/disclose";
 import { setPolicy } from "./policy";
 
 /**
- * PASClient — the public API surface for @pas/sdk.
+ * PASClient — the public API surface for @peekaboopay/sdk.
  *
  * Usage:
  *   const pas = new PASClient({ backend, ... });

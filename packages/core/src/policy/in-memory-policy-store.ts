@@ -1,4 +1,4 @@
-import type { PolicyRule, PolicyStore, SpendRecord } from "@pas/types";
+import type { PolicyRule, PolicyStore, SpendRecord } from "@peekaboopay/types";
 
 /**
  * In-memory implementation of PolicyStore.

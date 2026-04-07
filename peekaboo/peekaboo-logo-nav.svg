@@ -1,0 +1,21 @@
+<svg viewBox="0 0 480 80" xmlns="http://www.w3.org/2000/svg" width="480" height="80">
+  <rect width="480" height="80" fill="#0c0b1a"/>
+
+  <!-- Eye mark -->
+  <ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" stroke-width="1.5"/>
+  <circle cx="40" cy="40" r="12" fill="#00a884"/>
+  <circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" stroke-width="2"/>
+  <circle cx="40" cy="40" r="4" fill="#060614"/>
+
+  <!-- Wordmark -->
+  <text x="88" y="50" font-family="'Syne', sans-serif" font-weight="800" font-size="28"
+        letter-spacing="-1" fill="#ede9ff">peek</text>
+  <text x="175" y="50" font-family="'Syne', sans-serif" font-weight="800" font-size="28"
+        letter-spacing="-1" fill="#00e5b4">—</text>
+  <text x="203" y="50" font-family="'Syne', sans-serif" font-weight="800" font-size="28"
+        letter-spacing="-1" fill="#ede9ff">a</text>
+  <text x="225" y="50" font-family="'Syne', sans-serif" font-weight="800" font-size="28"
+        letter-spacing="-1" fill="#00e5b4">—</text>
+  <text x="253" y="50" font-family="'Syne', sans-serif" font-weight="800" font-size="28"
+        letter-spacing="-1" fill="#ede9ff">boo</text>
+</svg>

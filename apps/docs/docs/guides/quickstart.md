@@ -9,14 +9,14 @@ Get started with PAS in under 5 minutes.
 ## Install
 
 ```bash
-npm install @pas/sdk @pas/adapter-railgun
+npm install @peekaboopay/sdk @peekaboopay/adapter-railgun
 ```
 
 ## Basic Usage
 
 ```typescript
-import { PASClient } from "@pas/sdk";
-import { RailgunAdapter } from "@pas/adapter-railgun";
+import { PASClient } from "@peekaboopay/sdk";
+import { RailgunAdapter } from "@peekaboopay/adapter-railgun";
 
 // 1. Create a privacy backend
 const backend = new RailgunAdapter();
@@ -52,7 +52,7 @@ For MCP-compatible agents, PAS exposes tools automatically:
   "mcpServers": {
     "pas": {
       "command": "npx",
-      "args": ["@pas/mcp-server"]
+      "args": ["@peekaboopay/mcp-server"]
     }
   }
 }

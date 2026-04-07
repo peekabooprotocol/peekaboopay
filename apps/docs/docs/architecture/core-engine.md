@@ -15,4 +15,4 @@ Privacy orchestration and state management.
 
 ## Package
 
-`@pas/core` — provides `PASEngine` which orchestrates all four modules.
+`@peekaboopay/core` — provides `PASEngine` which orchestrates all four modules.

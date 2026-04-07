@@ -1,5 +1,5 @@
-import type { PolicyRule } from "@pas/types";
-import type { PASEngine } from "@pas/core";
+import type { PolicyRule } from "@peekaboopay/types";
+import type { PASEngine } from "@peekaboopay/core";
 
 export async function setPolicy(_engine: PASEngine, _rules: PolicyRule[]): Promise<void> {
 	throw new Error("Not implemented");
