@@ -302,20 +302,16 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   <div class="step r" id="step-1">
     <div class="step-header">
       <span class="step-num">1</span>
-      <span class="step-title">Install the SDK</span>
+      <span class="step-title">Install Peek-a-boo</span>
     </div>
-    <p class="step-desc">Install the Peek-a-boo SDK and your preferred chain adapter. The SDK provides a unified privacy interface — the adapter handles chain-specific operations.</p>
+    <p class="step-desc">One command installs the entire protocol — SDK, chain adapters, x402 payments, MCP agent tools, and ZK cryptography. Everything you need.</p>
     <div class="code-block">
-      <span class="code-label">Bittensor</span>
-<span class="fn">npm</span> <span class="kw">install</span> <span class="str">@peekaboopay/sdk</span> <span class="str">@peekaboopay/adapter-bittensor</span>
-    </div>
-    <div class="code-block">
-      <span class="code-label">Ethereum / Railgun</span>
-<span class="fn">npm</span> <span class="kw">install</span> <span class="str">@peekaboopay/sdk</span> <span class="str">@peekaboopay/adapter-railgun</span>
+      <span class="code-label">Terminal</span>
+<span class="fn">npm</span> <span class="kw">install</span> <span class="str">peekaboopay</span>
     </div>
     <div class="info-card">
-      <div class="info-card-label">Supported Chains</div>
-      <p>Peek-a-boo supports Bittensor EVM (chain <code>964</code>), Ethereum, BSC, Polygon, and Arbitrum. Choose the adapter that matches your target chain.</p>
+      <div class="info-card-label">What's included</div>
+      <p>SDK &amp; Core, Bittensor adapter (chain <code>964</code>), Railgun adapter (Ethereum, BSC, Polygon, Arbitrum), x402 shielded payments, MCP agent tools, Poseidon hashing &amp; Groth16 proofs.</p>
     </div>
   </div>
 
@@ -328,8 +324,8 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
     <p class="step-desc">Create a privacy backend and initialize the SDK client. The adapter handles RPC connection, contract discovery, and Merkle tree synchronization.</p>
     <div class="code-block">
       <span class="code-label">TypeScript</span>
-<span class="kw">import</span> { <span class="fn">PASClient</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/sdk"</span>;
-<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/adapter-bittensor"</span>;
+<span class="kw">import</span> { <span class="fn">PASClient</span> } <span class="kw">from</span> <span class="str">"peekaboopay"</span>;
+<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">"peekaboopay"</span>;
 
 <span class="cmt">// Create the privacy backend</span>
 <span class="kw">const</span> adapter = <span class="kw">new</span> <span class="fn">BittensorAdapter</span>();
@@ -503,7 +499,7 @@ console.<span class="fn">log</span>(<span class="str">"Shielded balance:"</span>
     <p class="step-desc">Peek-a-boo supports the x402 payment protocol — private payments triggered by HTTP 402 responses. Your agent automatically handles payment negotiation.</p>
     <div class="code-block">
       <span class="code-label">TypeScript</span>
-<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">"@peekaboopay/x402"</span>;
+<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">"peekaboopay"</span>;
 
 <span class="kw">const</span> shieldedFetch = <span class="fn">createShieldedFetch</span>({
   pay: <span class="kw">async</span> (params) => {

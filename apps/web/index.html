@@ -332,44 +332,32 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
   text-align: left;
   animation: fadeUp 0.8s 1.3s ease both;
 }
-.term-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-}
-.term-tab {
-  flex: 1;
-  padding: 0.65rem 1rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s, background 0.2s;
-  text-align: center;
-  border-right: 1px solid var(--border);
-}
-.term-tab:last-child { border-right: none; }
-.term-tab:hover { color: var(--text); }
-.term-tab.active { color: var(--mint); background: rgba(0,229,180,0.04); }
 .term-panel {
-  display: none;
-  padding: 1.25rem 1.5rem;
+  padding: 1.1rem 1.5rem;
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
-  line-height: 1.9;
-  color: var(--muted);
-  min-height: 120px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text);
+  letter-spacing: 0.02em;
 }
-.term-panel.active { display: block; }
 .term-panel .prompt { color: var(--mint); }
-.term-panel .kw { color: var(--violet); }
-.term-panel .fn { color: var(--mint); }
-.term-panel .str { color: #ffa657; }
-.term-panel .cmt { color: var(--dimmed); font-style: italic; }
+.term-panel .fn { color: var(--mint); font-weight: 400; }
+.term-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem 1rem;
+  border-top: 1px solid var(--border);
+}
+.term-pkg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
 /* ── PARTICLE CANVAS ── */
 .particle-canvas {
   position: fixed; inset: 0;
@@ -461,30 +449,15 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
     <a href="/docs/" class="btn btn-outline">View Docs</a>
   </div>
   <div class="hero-terminal">
-    <div class="term-tabs">
-      <button class="term-tab active" onclick="showTab(0)">SDK</button>
-      <button class="term-tab" onclick="showTab(1)">MCP Agent</button>
-      <button class="term-tab" onclick="showTab(2)">x402</button>
+    <div class="term-panel active"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span></div>
+    <div class="term-includes">
+      <span class="term-pkg"><span class="dot-s live"></span> SDK &amp; Core</span>
+      <span class="term-pkg"><span class="dot-s live"></span> Bittensor Adapter</span>
+      <span class="term-pkg"><span class="dot-s live"></span> Railgun Adapter</span>
+      <span class="term-pkg"><span class="dot-s live"></span> x402 Payments</span>
+      <span class="term-pkg"><span class="dot-s live"></span> MCP Agent Tools</span>
+      <span class="term-pkg"><span class="dot-s live"></span> ZK Crypto</span>
     </div>
-    <div class="term-panel active" id="tab0"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
-
-<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">'peekaboopay'</span>
-<span class="kw">const</span> adapter = <span class="kw">new</span> <span class="fn">BittensorAdapter</span>()
-<span class="kw">await</span> adapter.<span class="fn">shield</span>({ amount: <span class="str">1000000000000000000n</span> })
-<span class="cmt">// → shielded. zero traces.</span></div>
-    <div class="term-panel" id="tab1"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
-
-<span class="cmt">// Any MCP agent (Claude, LangChain, CrewAI)</span>
-<span class="cmt">// calls privacy tools as native tool calls:</span>
-{ <span class="str">"tool"</span>: <span class="str">"pas_pay"</span>,
-  <span class="str">"args"</span>: { <span class="str">"amount"</span>: <span class="str">"1.0"</span>, <span class="str">"token"</span>: <span class="str">"TAO"</span> } }
-<span class="cmt">// → agent pays privately via shielded pool</span></div>
-    <div class="term-panel" id="tab2"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
-
-<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">'peekaboopay'</span>
-<span class="kw">const</span> fetch = <span class="fn">createShieldedFetch</span>({ pay })
-<span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.example.com/data'</span>)
-<span class="cmt">// → 402 → shielded payment → 200 OK</span></div>
   </div>
   <div class="scroll-hint">
     <div class="scroll-line"></div>
@@ -740,10 +713,6 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('v'); });
   }, {threshold:0.1});
   document.querySelectorAll('.r').forEach(el=>obs.observe(el));
-  window.showTab = function(idx) {
-    document.querySelectorAll('.term-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-    document.querySelectorAll('.term-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
-  };
   window.tog = function(head) {
     const item = head.closest('.accord-item, .faq-item');
     const wasOpen = item.classList.contains('open');
