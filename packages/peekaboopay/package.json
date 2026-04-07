@@ -1,0 +1,41 @@
+{
+  "name": "peekaboopay",
+  "version": "0.1.0",
+  "description": "Private payments for web3 — ZK-SNARKs, stealth addresses, multi-chain. One install, everything included.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "postinstall.cjs"],
+  "scripts": {
+    "build": "tsup",
+    "postinstall": "node postinstall.cjs"
+  },
+  "publishConfig": { "access": "public" },
+  "dependencies": {
+    "@peekaboopay/types": "^0.1.0",
+    "@peekaboopay/core": "^0.1.0",
+    "@peekaboopay/crypto": "^0.1.0",
+    "@peekaboopay/sdk": "^0.1.0",
+    "@peekaboopay/adapter-bittensor": "^0.1.0",
+    "@peekaboopay/adapter-railgun": "^0.1.0",
+    "@peekaboopay/x402": "^0.1.0",
+    "@peekaboopay/mcp-server": "^0.1.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  },
+  "keywords": ["privacy", "web3", "zk-snarks", "stealth-addresses", "bittensor", "railgun", "x402", "mcp", "ai-agents"],
+  "homepage": "https://peekaboo.finance",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peekabooprotocol/peekaboopay"
+  },
+  "license": "MIT"
+}

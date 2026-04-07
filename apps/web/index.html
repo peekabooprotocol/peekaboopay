@@ -466,22 +466,22 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
       <button class="term-tab" onclick="showTab(1)">MCP Agent</button>
       <button class="term-tab" onclick="showTab(2)">x402</button>
     </div>
-    <div class="term-panel active" id="tab0"><span class="prompt">$</span> npm install <span class="fn">@peekaboopay/sdk</span> <span class="fn">@peekaboopay/adapter-bittensor</span>
+    <div class="term-panel active" id="tab0"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
 
-<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">'@peekaboopay/adapter-bittensor'</span>
+<span class="kw">import</span> { <span class="fn">BittensorAdapter</span> } <span class="kw">from</span> <span class="str">'peekaboopay'</span>
 <span class="kw">const</span> adapter = <span class="kw">new</span> <span class="fn">BittensorAdapter</span>()
 <span class="kw">await</span> adapter.<span class="fn">shield</span>({ amount: <span class="str">1000000000000000000n</span> })
 <span class="cmt">// → shielded. zero traces.</span></div>
-    <div class="term-panel" id="tab1"><span class="prompt">$</span> npm install <span class="fn">@peekaboopay/mcp-server</span>
+    <div class="term-panel" id="tab1"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
 
 <span class="cmt">// Any MCP agent (Claude, LangChain, CrewAI)</span>
 <span class="cmt">// calls privacy tools as native tool calls:</span>
 { <span class="str">"tool"</span>: <span class="str">"pas_pay"</span>,
   <span class="str">"args"</span>: { <span class="str">"amount"</span>: <span class="str">"1.0"</span>, <span class="str">"token"</span>: <span class="str">"TAO"</span> } }
 <span class="cmt">// → agent pays privately via shielded pool</span></div>
-    <div class="term-panel" id="tab2"><span class="prompt">$</span> npm install <span class="fn">@peekaboopay/x402</span>
+    <div class="term-panel" id="tab2"><span class="prompt">$</span> npm install <span class="fn">peekaboopay</span>
 
-<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">'@peekaboopay/x402'</span>
+<span class="kw">import</span> { <span class="fn">createShieldedFetch</span> } <span class="kw">from</span> <span class="str">'peekaboopay'</span>
 <span class="kw">const</span> fetch = <span class="fn">createShieldedFetch</span>({ pay })
 <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.example.com/data'</span>)
 <span class="cmt">// → 402 → shielded payment → 200 OK</span></div>
