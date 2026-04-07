@@ -40,10 +40,18 @@ ${d}    ───${r}
     ${v}import${r} { ${m}createMCPServer${r} } ${v}from${r} ${g}'@peekaboopay/mcp-server'${r}
 
 ${d}  ─────────────────────────────────────────${r}
+
+${m}  API Keys ${d}(for agent access)${r}
+${d}    1. Connect wallet at ${m}app.peekaboo.finance${d}
+    2. Go to API Keys → Generate
+    3. Use in your agent:${r}
+    ${v}headers${r}: { ${g}"Authorization"${r}: ${g}"Bearer pab_..."${r} }
+
+${d}  ─────────────────────────────────────────${r}
 ${b}  Links:${r}
-    ${m}Docs${r}         ${d}https://peekaboo.finance/docs/${r}
+    ${m}Dashboard${r}     ${d}https://app.peekaboo.finance${r}
     ${m}Get Started${r}   ${d}https://peekaboo.finance/get-started/${r}
-    ${m}Bittensor${r}     ${d}https://peekaboo.finance/bittensor/${r}
+    ${m}Docs${r}          ${d}https://peekaboo.finance/docs/${r}
     ${m}GitHub${r}        ${d}https://github.com/peekabooprotocol/peekaboopay${r}
 ${d}  ─────────────────────────────────────────${r}
 `);

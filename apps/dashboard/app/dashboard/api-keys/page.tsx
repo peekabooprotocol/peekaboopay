@@ -160,17 +160,74 @@ export default function ApiKeysPage() {
 				)}
 			</div>
 
-			<div className="mt-4 bg-surface/50 border border-border rounded-lg p-4">
-				<p className="text-xs text-muted leading-relaxed">
-					<span className="text-mint font-mono text-[10px] uppercase tracking-wider">
-						Usage
-					</span>
-					<br />
-					Include your API key in the Authorization header:{" "}
-					<code className="text-mint text-[11px]">
-						Authorization: Bearer pab_...
-					</code>
-				</p>
+			{/* Quick Start Guide */}
+			<div className="mt-6 space-y-3">
+				<h2 className="font-heading font-bold text-lg">
+					How to use your API key
+				</h2>
+
+				<div className="bg-surface border border-border rounded-lg p-5">
+					<p className="text-mint font-mono text-[10px] uppercase tracking-wider mb-3">
+						Step 1 — Add to your agent
+					</p>
+					<pre className="bg-bg border border-border rounded p-4 text-xs font-mono text-muted overflow-x-auto leading-relaxed">
+						<code>
+{`const response = await fetch(
+  "https://app.peekaboo.finance/api/balance",
+  {
+    headers: {
+      "Authorization": "Bearer pab_your_key_here",
+    },
+  }
+);`}
+						</code>
+					</pre>
+				</div>
+
+				<div className="bg-surface border border-border rounded-lg p-5">
+					<p className="text-violet font-mono text-[10px] uppercase tracking-wider mb-3">
+						Step 2 — Available endpoints
+					</p>
+					<div className="space-y-1.5 text-xs font-mono">
+						<div className="flex gap-3">
+							<span className="text-mint w-12">GET</span>
+							<span className="text-body">/api/balance</span>
+							<span className="text-muted ml-auto">Shielded balance</span>
+						</div>
+						<div className="flex gap-3">
+							<span className="text-mint w-12">GET</span>
+							<span className="text-body">/api/transactions</span>
+							<span className="text-muted ml-auto">Tx history</span>
+						</div>
+						<div className="flex gap-3">
+							<span className="text-pink w-12">POST</span>
+							<span className="text-body">/api/shield</span>
+							<span className="text-muted ml-auto">Shield tokens</span>
+						</div>
+						<div className="flex gap-3">
+							<span className="text-pink w-12">POST</span>
+							<span className="text-body">/api/unshield</span>
+							<span className="text-muted ml-auto">Unshield tokens</span>
+						</div>
+						<div className="flex gap-3">
+							<span className="text-pink w-12">POST</span>
+							<span className="text-body">/api/transfer</span>
+							<span className="text-muted ml-auto">Private transfer</span>
+						</div>
+					</div>
+				</div>
+
+				<div className="bg-surface/50 border border-border rounded-lg p-4">
+					<p className="text-xs text-muted leading-relaxed">
+						<span className="text-mint font-mono text-[10px] uppercase tracking-wider">
+							Security
+						</span>
+						<br />
+						API keys are hashed with SHA-256 — we never store the
+						raw key. Generate separate keys per agent or environment.
+						Revoke immediately if compromised.
+					</p>
+				</div>
 			</div>
 		</div>
 	);

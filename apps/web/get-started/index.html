@@ -514,6 +514,60 @@ console.<span class="fn">log</span>(<span class="str">"Shielded balance:"</span>
     </div>
   </div>
 
+  <!-- SECTION: API Keys -->
+  <hr class="sep" style="margin-bottom:4rem">
+  <div class="step r" id="api-keys">
+    <h2 class="section-title">API Keys for <em>Agents</em></h2>
+    <p class="step-desc">Your agents need an API key to interact with Peek-a-boo programmatically. API keys are tied to your wallet address and use Bearer authentication.</p>
+
+    <div class="step-header" style="margin-top:2rem">
+      <span class="step-num" style="font-size:1.2rem">1</span>
+      <span class="step-title">Connect your wallet</span>
+    </div>
+    <p class="step-desc">Go to <a href="https://app.peekaboo.finance" style="color:var(--mint);text-decoration:none;border-bottom:1px solid rgba(0,229,180,0.3)">app.peekaboo.finance</a> and connect with MetaMask, Rabby, or any EVM wallet. Sign the SIWE message to authenticate.</p>
+
+    <div class="step-header">
+      <span class="step-num" style="font-size:1.2rem">2</span>
+      <span class="step-title">Generate an API key</span>
+    </div>
+    <p class="step-desc">Navigate to <strong>API Keys</strong> in the sidebar. Click <strong>Generate</strong>. Your key starts with <code>pab_</code> — save it immediately, it won't be shown again.</p>
+
+    <div class="step-header">
+      <span class="step-num" style="font-size:1.2rem">3</span>
+      <span class="step-title">Use the key in your agent</span>
+    </div>
+    <div class="code-block">
+      <span class="code-label">TypeScript</span>
+<span class="cmt">// Include your API key in the Authorization header</span>
+<span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"https://app.peekaboo.finance/api/balance"</span>, {
+  headers: {
+    <span class="str">"Authorization"</span>: <span class="str">"Bearer pab_your_api_key_here"</span>,
+  },
+});
+
+<span class="kw">const</span> { balance } = <span class="kw">await</span> response.<span class="fn">json</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Shielded balance:"</span>, balance);
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-label">Available API Endpoints</div>
+      <p>
+        <code>GET /api/balance</code> — Shielded balance<br>
+        <code>GET /api/transactions</code> — Transaction history<br>
+        <code>POST /api/shield</code> — Build shield transaction<br>
+        <code>POST /api/unshield</code> — Build unshield transaction<br>
+        <code>POST /api/transfer</code> — Build private transfer<br>
+        All endpoints require <code>Authorization: Bearer pab_...</code>
+      </p>
+    </div>
+
+    <div class="step-header">
+      <span class="step-num" style="font-size:1.2rem">4</span>
+      <span class="step-title">Manage your keys</span>
+    </div>
+    <p class="step-desc">You can generate multiple API keys (one per agent or environment). Revoke compromised keys instantly from the <a href="https://app.peekaboo.finance/dashboard/api-keys" style="color:var(--mint);text-decoration:none;border-bottom:1px solid rgba(0,229,180,0.3)">dashboard</a>. Revoked keys stop working immediately.</p>
+  </div>
+
   <!-- SECTION: What's Next -->
   <hr class="sep" style="margin-bottom:4rem">
   <div class="r" id="next">
