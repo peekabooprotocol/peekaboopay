@@ -18,6 +18,14 @@ export default function Home() {
 	return (
 		<main className="min-h-screen flex flex-col items-center justify-center px-6">
 			<div className="text-center max-w-lg">
+				<div className="flex justify-center mb-6">
+					<svg className="w-20 h-20" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+						<ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" strokeWidth="1.5"/>
+						<circle cx="40" cy="40" r="12" fill="#00a884"/>
+						<circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" strokeWidth="2"/>
+						<circle cx="40" cy="40" r="4" fill="#060614"/>
+					</svg>
+				</div>
 				<div className="mb-6 text-4xl">
 					<span className="font-heading font-extrabold">peek</span>
 					<span className="text-mint">—</span>

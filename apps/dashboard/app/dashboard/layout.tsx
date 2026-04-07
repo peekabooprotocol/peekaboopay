@@ -42,7 +42,13 @@ export default function DashboardLayout({
 			{/* Sidebar */}
 			<aside className="w-60 border-r border-border bg-bg2 flex flex-col">
 				<div className="p-5 border-b border-border">
-					<Link href="/" className="font-heading font-extrabold text-sm">
+					<Link href="https://peekaboo.finance" className="font-heading font-extrabold text-sm flex items-center gap-2">
+						<svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+							<ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" strokeWidth="1.5"/>
+							<circle cx="40" cy="40" r="12" fill="#00a884"/>
+							<circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" strokeWidth="2"/>
+							<circle cx="40" cy="40" r="4" fill="#060614"/>
+						</svg>
 						peek<span className="text-mint">—</span>a
 						<span className="text-mint">—</span>boo
 					</Link>
