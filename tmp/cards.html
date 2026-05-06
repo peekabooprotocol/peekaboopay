@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; padding: 2rem; font-family: 'Plus Jakarta Sans', sans-serif; }
+h2 { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: #6b6585; margin: 2.5rem 0 0.75rem; font-family: 'DM Mono', monospace; }
+.card { width: 1200px; height: 675px; background: #04030a; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.card::before { content: ''; position: absolute; top: -100px; left: -100px; width: 600px; height: 500px; background: radial-gradient(ellipse, rgba(123,107,255,0.13) 0%, transparent 70%); }
+.card::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 500px; height: 400px; background: radial-gradient(ellipse, rgba(0,229,180,0.09) 0%, transparent 70%); }
+.card * { position: relative; z-index: 1; }
+.brand { font-size: 24px; font-weight: 800; letter-spacing: -1px; color: #ede9ff; margin-bottom: 24px; }
+.brand .d { color: #00e5b4; }
+.title { font-size: 64px; font-weight: 800; letter-spacing: -3px; color: #ede9ff; line-height: 1.05; }
+.title em { font-style: normal; color: #00e5b4; }
+.sub { font-size: 24px; font-weight: 400; color: #a8a0be; margin-top: 14px; max-width: 700px; line-height: 1.5; }
+.tag { font-family: 'DM Mono', monospace; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: #6b6585; margin-top: 24px; }
+.url { font-family: 'DM Mono', monospace; font-size: 14px; color: #00e5b4; margin-top: 24px; letter-spacing: 1px; }
+.line { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent 0%, #00e5b4 20%, #00e5b4 80%, transparent 100%); }
+.two-chains { display: flex; gap: 40px; margin-top: 32px; }
+.chain-card { background: #0c0b1a; border: 1px solid rgba(255,255,255,0.07); padding: 28px 36px; text-align: center; flex: 1; }
+.chain-card .chain-name { font-size: 28px; font-weight: 800; color: #ede9ff; margin-top: 12px; }
+.chain-card .chain-id { font-family: 'DM Mono', monospace; font-size: 14px; color: #6b6585; margin-top: 6px; }
+.chain-card .chain-status { font-family: 'DM Mono', monospace; font-size: 13px; color: #00e5b4; margin-top: 10px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<!-- Tweet 1: Two chains live -->
+<div class="card" id="c1">
+  <div class="brand">peek<span class="d">—</span>a<span class="d">—</span>boo</div>
+  <div class="title">Two chains.<br><em>Zero traces.</em></div>
+  <div class="two-chains">
+    <div class="chain-card">
+      <svg width="48" height="48" viewBox="0 0 21.6 23.1"><path fill="#fff" d="M13.1,17.7V8.3c0-2.4-1.9-4.3-4.3-4.3v15.1c0,2.2,1.7,4,3.9,4c0.1,0,0.1,0,0.2,0c1,0.1,2.1-0.2,2.9-0.9C13.3,22,13.1,20.5,13.1,17.7z"/><path fill="#fff" d="M3.9,0C1.8,0,0,1.8,0,4h17.6c2.2,0,3.9-1.8,3.9-4H3.9z"/></svg>
+      <div class="chain-name">Bittensor</div>
+      <div class="chain-id">Chain 964</div>
+      <div class="chain-status">● LIVE</div>
+    </div>
+    <div class="chain-card" style="border-color:rgba(0,82,255,0.2)">
+      <svg width="48" height="48" viewBox="0 0 111 111"><circle cx="55.5" cy="55.5" r="55.5" fill="#0052FF"/><path d="M54.921 94.203c21.666 0 39.238-17.538 39.238-39.162S76.587 15.879 54.921 15.879C34.318 15.879 17.37 31.818 15.762 51.879h51.841v6.324H15.762c1.608 20.061 18.556 36 39.159 36z" fill="#fff"/></svg>
+      <div class="chain-name">Base</div>
+      <div class="chain-id">Chain 8453</div>
+      <div class="chain-status">● LIVE</div>
+    </div>
+  </div>
+  <div class="tag">Same contracts · Same ZK proofs · Same stealth addresses</div>
+  <div class="url">peekaboo.finance</div>
+  <div class="line"></div>
+</div>
+
+<!-- Tweet 2: Why Base -->
+<div class="card" id="c2" style="margin-top:2rem">
+  <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:600px;background:radial-gradient(ellipse,rgba(0,82,255,0.15) 0%,transparent 70%);z-index:0"></div>
+  <div class="brand">peek<span class="d">—</span>a<span class="d">—</span>boo</div>
+  <svg width="70" height="70" viewBox="0 0 111 111" style="margin-bottom:20px"><circle cx="55.5" cy="55.5" r="55.5" fill="#0052FF"/><path d="M54.921 94.203c21.666 0 39.238-17.538 39.238-39.162S76.587 15.879 54.921 15.879C34.318 15.879 17.37 31.818 15.762 51.879h51.841v6.324H15.762c1.608 20.061 18.556 36 39.159 36z" fill="#fff"/></svg>
+  <div class="title" style="font-size:56px">Bittensor + <em style="color:#0052FF">Base</em></div>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;text-align:left;font-size:20px;color:#a8a0be">
+    <div>🔷 Bittensor — TAO inference payments. Miners deserve privacy.</div>
+    <div>🔵 Base — $0.01 gas. Coinbase x402 ecosystem.</div>
+    <div>🤖 One SDK: <span style="font-family:'DM Mono',monospace;color:#00e5b4">npm install peekaboopay</span></div>
+  </div>
+  <div class="url">peekaboo.finance</div>
+  <div class="line" style="background:linear-gradient(90deg, transparent 0%, #0052FF 30%, #00e5b4 70%, transparent 100%)"></div>
+</div>
+
+<!-- Tweet 3: CTA -->
+<div class="card" id="c3" style="margin-top:2rem">
+  <svg width="80" height="80" viewBox="0 0 80 80" style="margin-bottom:16px"><ellipse cx="40" cy="40" rx="36" ry="14" fill="none" stroke="#00e5b4" stroke-width="1.5"/><circle cx="40" cy="40" r="12" fill="#00a884"/><circle cx="40" cy="40" r="8.5" fill="none" stroke="#005c47" stroke-width="2"/><circle cx="40" cy="40" r="4" fill="#060614"/></svg>
+  <div class="title">Contracts live.<br><em>SDK wired.</em></div>
+  <div class="sub">Bittensor + Base. ZK proofs. Stealth addresses. MCP tools.</div>
+  <div style="display:flex;gap:40px;margin-top:32px;font-family:'DM Mono',monospace;font-size:16px;color:#a8a0be">
+    <div><span style="color:#00e5b4;font-weight:700">npm</span> install peekaboopay</div>
+    <div><span style="color:#00e5b4;font-weight:700">web</span> peekaboo.finance</div>
+    <div><span style="color:#00e5b4;font-weight:700">app</span> app.peekaboo.finance</div>
+  </div>
+  <div class="tag" style="margin-top:28px">@peekaboo_pay</div>
+  <div class="line"></div>
+</div>
+
+</body>
+</html>

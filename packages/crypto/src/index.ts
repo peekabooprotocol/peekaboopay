@@ -27,5 +27,40 @@ export type {
 	ArtifactPaths,
 } from "./proof.js";
 
+// Note encryption (ECDH + AES-256-GCM)
+export {
+	encryptNote,
+	decryptNote,
+	tryDecryptNote,
+	deriveViewingPublicKey,
+	generateViewingKeyPair,
+} from "./encryption.js";
+export type { EncryptedNote, DecryptedNote } from "./encryption.js";
+
 // Utilities
 export { toBytes32Hex, fromBytes32Hex, randomCommitment } from "./utils.js";
+
+// Key hierarchy (viewing key separation)
+export {
+	deriveKeySet,
+	generateKeySet,
+	exportViewingKey,
+	hasSpendingAuthority,
+} from "./keys.js";
+export type {
+	KeyPair,
+	PeekabooKeySet,
+	ViewingKeyExport,
+} from "./keys.js";
+
+// Compliance proofs (Proof of Innocence)
+export {
+	SanctionedSet,
+	generateComplianceAttestation,
+	verifyComplianceAttestation,
+} from "./compliance.js";
+export type {
+	ExclusionProof,
+	ComplianceAttestation,
+	ComplianceVerification,
+} from "./compliance.js";

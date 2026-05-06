@@ -21,6 +21,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@noble/curves": "^1.7.0",
+    "@noble/hashes": "^1.6.0",
     "circomlibjs": "^0.1.7",
     "snarkjs": "^0.7.6"
   },
