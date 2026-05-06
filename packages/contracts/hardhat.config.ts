@@ -30,6 +30,14 @@ const config: HardhatUserConfig = {
 				? [process.env.DEPLOYER_PRIVATE_KEY]
 				: [],
 		},
+		// Base L2
+		base: {
+			url: process.env.BASE_RPC_URL || "https://mainnet.base.org",
+			chainId: 8453,
+			accounts: process.env.DEPLOYER_PRIVATE_KEY
+				? [process.env.DEPLOYER_PRIVATE_KEY]
+				: [],
+		},
 	},
 };
 

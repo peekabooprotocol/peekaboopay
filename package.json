@@ -23,7 +23,6 @@
     "vitest": "^2.1.0"
   },
   "workspaces": [
-    "apps/*",
     "packages/*",
     "packages/adapters/*",
     "packages/agent-adapters/*",

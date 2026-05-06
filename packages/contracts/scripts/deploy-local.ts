@@ -2,24 +2,29 @@ import { ethers, network } from "hardhat";
 
 async function main() {
 	const TREE_DEPTH = 20;
+	const networkName = network.name;
+	const isLegacy = networkName === "bittensor" || networkName === "bittensor-testnet";
 
-	// Use legacy gasPrice to avoid EIP-1559 maxFeePerGas issues on Bittensor EVM
+	console.log(`Network: ${networkName}`);
+	console.log(`Tx type: ${isLegacy ? "legacy (type 0)" : "EIP-1559"}\n`);
+
+	// Gas config — legacy for Bittensor, EIP-1559 for everything else
 	const feeData = await ethers.provider.getFeeData();
-	const gasPrice = feeData.gasPrice!;
-	console.log(`Gas price: ${ethers.formatUnits(gasPrice, "gwei")} gwei\n`);
+	const txOverrides: any = isLegacy
+		? { gasPrice: feeData.gasPrice!, type: 0 }
+		: {};
 
 	const [signer] = await ethers.getSigners();
 	const balance = await ethers.provider.getBalance(signer.address);
 	console.log(`Deployer: ${signer.address}`);
-	console.log(`Balance: ${ethers.formatEther(balance)} TAO\n`);
+	console.log(`Balance: ${ethers.formatEther(balance)}\n`);
 
 	// Step 1: Deploy PoseidonT3 library
 	console.log("Deploying PoseidonT3 library...");
 	const PoseidonT3 = require("poseidon-solidity/deploy/PoseidonT3");
 	const poseidonTx = await signer.sendTransaction({
 		data: PoseidonT3.bytecode,
-		gasPrice,
-		type: 0, // legacy tx — avoids EIP-1559 fee calculation
+		...txOverrides,
 	});
 	const poseidonReceipt = await poseidonTx.wait();
 	const poseidonAddr = poseidonReceipt!.contractAddress!;
@@ -28,7 +33,7 @@ async function main() {
 	// Step 2: Deploy Groth16 Verifier
 	console.log("\nDeploying Groth16Verifier...");
 	const VerifierFactory = await ethers.getContractFactory("Groth16Verifier");
-	const verifier = await VerifierFactory.deploy({ gasPrice });
+	const verifier = await VerifierFactory.deploy(txOverrides);
 	await verifier.waitForDeployment();
 	const verifierAddr = await verifier.getAddress();
 	console.log(`  Groth16Verifier deployed at: ${verifierAddr}`);
@@ -42,7 +47,7 @@ async function main() {
 	});
 	const FEE_BPS = 50; // 0.5% protocol fee
 	const feeRecipient = signer.address; // deployer receives fees
-	const pool = await PoolFactory.deploy(TREE_DEPTH, verifierAddr, feeRecipient, FEE_BPS, { gasPrice });
+	const pool = await PoolFactory.deploy(TREE_DEPTH, verifierAddr, feeRecipient, FEE_BPS, txOverrides);
 	await pool.waitForDeployment();
 	const poolAddr = await pool.getAddress();
 	console.log(`  ShieldedPool deployed at: ${poolAddr}`);
@@ -53,7 +58,7 @@ async function main() {
 	// Step 4: Deploy StealthAnnouncer
 	console.log("\nDeploying StealthAnnouncer...");
 	const AnnouncerFactory = await ethers.getContractFactory("StealthAnnouncer");
-	const announcer = await AnnouncerFactory.deploy({ gasPrice });
+	const announcer = await AnnouncerFactory.deploy(txOverrides);
 	await announcer.waitForDeployment();
 	const announcerAddr = await announcer.getAddress();
 	console.log(`  StealthAnnouncer deployed at: ${announcerAddr}`);
@@ -66,7 +71,7 @@ async function main() {
 				Groth16Verifier: verifierAddr,
 				ShieldedPool: poolAddr,
 				StealthAnnouncer: announcerAddr,
-				network: network.name,
+				network: networkName,
 				treeDepth: TREE_DEPTH,
 			},
 			null,
