@@ -1,0 +1,14 @@
+{
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null,
+  "rewrites": [
+    { "source": "/docs", "destination": "/docs/index.html" },
+    { "source": "/docs/", "destination": "/docs/index.html" },
+    { "source": "/bittensor", "destination": "/bittensor/index.html" },
+    { "source": "/bittensor/", "destination": "/bittensor/index.html" },
+    { "source": "/get-started", "destination": "/get-started/index.html" },
+    { "source": "/get-started/", "destination": "/get-started/index.html" },
+    { "source": "/((?!docs|bittensor|get-started).*)", "destination": "/index.html" }
+  ]
+}

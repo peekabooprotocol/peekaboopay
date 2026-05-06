@@ -1,0 +1,34 @@
+{
+  "name": "@peekaboopay/lit",
+  "version": "0.1.0",
+  "publishConfig": { "access": "public" },
+  "description": "Lit Protocol integration — decentralized key management and programmable signing for Peek-a-boo agents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "@lit-protocol/lit-node-client": "^7.4.0",
+    "@lit-protocol/pkp-ethers": "^7.4.0",
+    "@lit-protocol/constants": "^7.4.0",
+    "@lit-protocol/types": "^7.4.0",
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}
