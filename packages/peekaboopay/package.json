@@ -1,6 +1,6 @@
 {
   "name": "peekaboopay",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "description": "Private payments for web3 — ZK-SNARKs, stealth addresses, multi-chain. One install, everything included.",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,7 +26,8 @@
     "@peekaboopay/adapter-bittensor": "^0.1.0",
     "@peekaboopay/adapter-railgun": "^0.1.0",
     "@peekaboopay/x402": "^0.1.0",
-    "@peekaboopay/mcp-server": "^0.1.0"
+    "@peekaboopay/mcp-server": "^0.1.0",
+    "@peekaboopay/lit": "^0.1.0"
   },
   "devDependencies": {
     "@peekaboopay/tsconfig": "*"
