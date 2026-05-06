@@ -1,6 +1,6 @@
 {
   "name": "peekaboopay",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Private payments for web3 — ZK-SNARKs, stealth addresses, multi-chain. One install, everything included.",
   "type": "module",
   "main": "./dist/index.js",
