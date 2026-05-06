@@ -1,6 +1,6 @@
 {
   "name": "@peekaboopay/settlement",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publishConfig": { "access": "public" },
   "description": "Settlement layer — L1/L2 providers and gasless relay",
   "type": "module",
