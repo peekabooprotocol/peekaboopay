@@ -433,6 +433,8 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
       <a href="#viewing-keys" class="sidebar-link">Viewing Keys</a>
       <a href="#compliance" class="sidebar-link">Compliance Proofs</a>
       <a href="#lit" class="sidebar-link">Lit Protocol</a>
+      <a href="#relayer" class="sidebar-link">Relayer Network</a>
+      <a href="#denominations" class="sidebar-link">Denomination Pools</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-heading">Reference</div>
@@ -494,7 +496,7 @@ npm install
 <span class="cmt"># Build everything</span>
 npm run build
 
-<span class="cmt"># Run all 289 tests</span>
+<span class="cmt"># Run all 486 tests</span>
 npm run test
 
 <span class="cmt"># Build a specific package</span>
@@ -817,7 +819,7 @@ nullifier, secret, pathElements[], pathIndices[]
     <section id="packages" class="doc-section r">
       <h2 class="doc-section-title"><span class="sec-num">13</span> Package Map</h2>
       <p class="doc-p">
-        18 packages total. 289 tests, all passing.
+        19 packages total. 486 tests, all passing.
       </p>
       <table class="doc-table">
         <thead>
@@ -1141,6 +1143,94 @@ Master Seed (32 bytes)
       <div class="info-card">
         <div class="info-card-label">No Raw Keys</div>
         <p>With Lit Protocol, the agent's private key never exists on any single machine. Threshold signatures across decentralized TEE nodes ensure that even a fully compromised agent process cannot steal funds.</p>
+      </div>
+    </section>
+
+    <hr class="doc-divider">
+
+    <!-- RELAYER NETWORK -->
+    <section id="relayer" class="doc-section r">
+      <h2 class="doc-section-title"><span class="sec-num">21</span> Relayer Network</h2>
+      <p class="doc-p">
+        Meta-transaction relay for stealth addresses. When a stealth address receives shielded funds, it has no ETH/TAO for gas. Funding it from a known wallet would break privacy. The relayer solves this &mdash; the recipient signs an EIP-712 request, the relayer submits the transaction and pays gas, deducting a small fee from the withdrawal.
+      </p>
+
+      <h3 class="doc-h3">How It Works</h3>
+      <div class="code-block">
+        <span class="code-label">Flow</span>
+Stealth Address                 Relayer                     Chain
+  |                               |                          |
+  |-- <span class="fn">signRelayRequest</span>() ------->|                          |
+  |   <span class="cmt">(EIP-712 typed data)</span>        |                          |
+  |                               |-- <span class="fn">submitTransaction</span>() -->|
+  |                               |   <span class="cmt">(pays gas)</span>              |
+  |                               |<-- receipt ---------------|
+  |<-- withdrawal (minus fee) ----|                          |
+      </div>
+
+      <h3 class="doc-h3">API</h3>
+      <table class="doc-table">
+        <thead><tr><th>Function</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>createRelayClient(config)</code></td><td>Create a relayer instance with RPC + private key</td></tr>
+          <tr><td><code>signRelayRequest(signer, request)</code></td><td>EIP-712 sign a relay request from the stealth address</td></tr>
+          <tr><td><code>submitRelayRequest(client, request)</code></td><td>Relayer verifies signature, submits tx, deducts fee</td></tr>
+          <tr><td><code>verifyRelaySignature(request)</code></td><td>Verify a signed relay request is valid</td></tr>
+          <tr><td><code>estimateRelayFee(client, request)</code></td><td>Estimate gas cost + relay fee before submitting</td></tr>
+          <tr><td><code>buildWithdrawMetaTx(params)</code></td><td>Build a relay request for ShieldedPool withdrawal</td></tr>
+          <tr><td><code>buildAnnounceMetaTx(params)</code></td><td>Build a relay request for StealthAnnouncer</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-card">
+        <div class="info-card-label">Security</div>
+        <p>Relay requests use EIP-712 typed data signatures with nonce replay prevention and deadline enforcement. The relayer cannot modify the transaction &mdash; it can only submit what the stealth address holder signed. Maximum relay fee is capped at 5% (500 basis points).</p>
+      </div>
+    </section>
+
+    <hr class="doc-divider">
+
+    <!-- DENOMINATION POOLS -->
+    <section id="denominations" class="doc-section r">
+      <h2 class="doc-section-title"><span class="sec-num">22</span> Denomination Pools</h2>
+      <p class="doc-p">
+        Fixed-amount deposit pools following the Tornado Cash pattern. Every deposit in a pool is exactly the same amount &mdash; 0.1, 1, or 10 TAO. This creates much larger anonymity sets than variable-amount deposits, because all deposits and withdrawals look identical.
+      </p>
+
+      <h3 class="doc-h3">Why Fixed Denominations?</h3>
+      <p class="doc-p">
+        With variable amounts, an observer can correlate deposits and withdrawals by matching amounts. If you deposit 1.37 TAO and someone withdraws 1.37 TAO, that's a potential link. With fixed denominations, every deposit of 1 TAO looks identical to every other 1 TAO deposit &mdash; the anonymity set is everyone in the pool.
+      </p>
+
+      <h3 class="doc-h3">DenominatedPool.sol</h3>
+      <p class="doc-p">
+        A simplified ShieldedPool contract that enforces exact deposit amounts. <code>deposit()</code> requires <code>msg.value == denomination</code>. <code>withdraw()</code> always returns the denomination amount (minus the 0.5% protocol fee). No amount parameter needed &mdash; the contract knows exactly how much to send.
+      </p>
+
+      <table class="doc-table">
+        <thead><tr><th>Pool</th><th>Denomination</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td>Pool A</td><td><code>0.1 TAO</code></td><td>Small payments, micro-transactions</td></tr>
+          <tr><td>Pool B</td><td><code>1 TAO</code></td><td>Standard payments, inference fees</td></tr>
+          <tr><td>Pool C</td><td><code>10 TAO</code></td><td>Larger transfers, bulk operations</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="doc-h3">SDK Helpers</h3>
+      <table class="doc-table">
+        <thead><tr><th>Function</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>DENOMINATIONS</code></td><td>Standard denomination constants in wei (TAO_01, TAO_1, TAO_10, ETH_01, ETH_1)</td></tr>
+          <tr><td><code>suggestDenomination(amount)</code></td><td>Optimal split for any amount into fixed denominations</td></tr>
+          <tr><td><code>denominationLabel(amount, symbol)</code></td><td>Human-readable label (e.g., "1 TAO")</td></tr>
+          <tr><td><code>isExactlyDenominatable(amount)</code></td><td>Check if amount splits evenly with no remainder</td></tr>
+          <tr><td><code>totalDepositsNeeded(amount)</code></td><td>Number of deposits needed for a given amount</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-card">
+        <div class="info-card-label">Multi-Chain</div>
+        <p>DenominatedPool contracts deploy to any EVM chain. The same contract works on Bittensor (TAO pools) and Base L2 (ETH pools). All three denomination sizes share the same Groth16Verifier and PoseidonT3 library.</p>
       </div>
     </section>
 

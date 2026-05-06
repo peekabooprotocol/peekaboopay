@@ -1,0 +1,36 @@
+{
+  "name": "@peekaboopay/nym",
+  "version": "0.1.0",
+  "publishConfig": { "access": "public" },
+  "description": "Nym mixnet integration — network-level privacy for Peek-a-boo RPC calls",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "ethers": "^6.16.0"
+  },
+  "peerDependencies": {
+    "@nymproject/sdk": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nymproject/sdk": { "optional": true }
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}
