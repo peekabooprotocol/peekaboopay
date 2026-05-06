@@ -1,0 +1,33 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0c0b1a"/>
+
+  <!-- Nebula blobs -->
+  <ellipse cx="150" cy="150" rx="380" ry="260" fill="rgba(82,60,180,0.09)"/>
+  <ellipse cx="1050" cy="480" rx="320" ry="220" fill="rgba(0,180,140,0.06)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Eye mark -->
+  <ellipse cx="600" cy="255" rx="210" ry="78"
+           fill="none" stroke="#00e5b4" stroke-width="2.5"/>
+  <circle cx="600" cy="255" r="64" fill="#00a884"/>
+  <circle cx="600" cy="255" r="46" fill="none" stroke="#005c47" stroke-width="5"/>
+  <circle cx="600" cy="255" r="21" fill="#060614"/>
+
+  <!-- Wordmark -->
+  <text x="600" y="400" font-family="'Syne', sans-serif" font-weight="800" font-size="64"
+        letter-spacing="-2.5" fill="#ede9ff" text-anchor="middle">peek<tspan fill="#00e5b4">—</tspan>a<tspan fill="#00e5b4">—</tspan>boo</text>
+
+  <!-- Tagline -->
+  <text x="600" y="452" font-family="monospace" font-size="15"
+        letter-spacing="5" fill="#6b6585" text-anchor="middle">INFERENCE PRIVACY FOR AI AGENTS ON BITTENSOR</text>
+
+  <!-- Bottom stats row -->
+  <line x1="200" y1="520" x2="1000" y2="520" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="290" y="560" font-family="monospace" font-size="13" letter-spacing="2" fill="#2d2847" text-anchor="middle">246 TESTS</text>
+  <text x="450" y="560" font-family="monospace" font-size="13" letter-spacing="2" fill="#2d2847" text-anchor="middle">16 PACKAGES</text>
+  <text x="610" y="560" font-family="monospace" font-size="13" letter-spacing="2" fill="#2d2847" text-anchor="middle">CHAIN ID 964</text>
+  <text x="770" y="560" font-family="monospace" font-size="13" letter-spacing="2" fill="#2d2847" text-anchor="middle">ZK PROOFS</text>
+  <text x="920" y="560" font-family="monospace" font-size="13" letter-spacing="2" fill="#2d2847" text-anchor="middle">MCP NATIVE</text>
+</svg>

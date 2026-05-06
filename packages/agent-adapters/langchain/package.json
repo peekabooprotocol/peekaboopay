@@ -1,0 +1,33 @@
+{
+  "name": "@peekaboopay/agent-langchain",
+  "version": "0.2.0",
+  "publishConfig": { "access": "public" },
+  "description": "LangChain tool wrappers for PAS SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "@peekaboopay/sdk": "*"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  },
+  "peerDependencies": {
+    "@langchain/core": ">=0.3.0"
+  }
+}

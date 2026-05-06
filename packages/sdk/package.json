@@ -1,0 +1,31 @@
+{
+  "name": "@peekaboopay/sdk",
+  "version": "0.2.0",
+  "publishConfig": { "access": "public" },
+  "description": "Private Agent Shell SDK — universal privacy interface for AI agents",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "@peekaboopay/core": "*",
+    "@noble/curves": "^1.7.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "@peekaboopay/mcp-server",
+  "version": "0.2.0",
+  "publishConfig": { "access": "public" },
+  "description": "Peek-a-boo MCP server — expose privacy tools to any MCP-compatible agent",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "peekaboopay-mcp": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@peekaboopay/types": "*",
+    "@peekaboopay/sdk": "*",
+    "@peekaboopay/core": "*",
+    "@peekaboopay/adapter-bittensor": "*",
+    "@peekaboopay/adapter-railgun": "*",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@peekaboopay/tsconfig": "*"
+  }
+}

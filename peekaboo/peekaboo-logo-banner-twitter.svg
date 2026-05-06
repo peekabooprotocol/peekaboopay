@@ -1,0 +1,22 @@
+<svg viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg" width="1500" height="500">
+  <rect width="1500" height="500" fill="#0c0b1a"/>
+
+  <!-- Subtle bg nebula hints -->
+  <ellipse cx="200" cy="200" rx="400" ry="280" fill="rgba(82,60,180,0.07)"/>
+  <ellipse cx="1300" cy="320" rx="350" ry="240" fill="rgba(0,180,140,0.05)"/>
+
+  <!-- Eye mark -->
+  <ellipse cx="750" cy="230" rx="240" ry="88"
+           fill="none" stroke="#00e5b4" stroke-width="2.5"/>
+  <circle cx="750" cy="230" r="72" fill="#00a884"/>
+  <circle cx="750" cy="230" r="52" fill="none" stroke="#005c47" stroke-width="5"/>
+  <circle cx="750" cy="230" r="24" fill="#060614"/>
+
+  <!-- Wordmark -->
+  <text x="750" y="390" font-family="'Syne', sans-serif" font-weight="800" font-size="42"
+        letter-spacing="-1.5" fill="#ede9ff" text-anchor="middle">peek<tspan fill="#00e5b4">—</tspan>a<tspan fill="#00e5b4">—</tspan>boo</text>
+
+  <!-- Tagline -->
+  <text x="750" y="430" font-family="monospace" font-size="16"
+        letter-spacing="4" fill="#6b6585" text-anchor="middle">INFERENCE PRIVACY FOR AI AGENTS ON BITTENSOR</text>
+</svg>
