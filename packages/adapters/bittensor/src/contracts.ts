@@ -1,14 +1,32 @@
 import type { Hex } from "@peekaboopay/types";
 
 // ---------------------------------------------------------------
-// Deployed contract addresses (Bittensor EVM Mainnet, Chain 964)
+// Deployed contract addresses
 // ---------------------------------------------------------------
 
-export const MAINNET_CONTRACTS = {
+/** Bittensor EVM Mainnet (Chain 964) */
+export const BITTENSOR_CONTRACTS = {
 	shieldedPool: "0xaf243B3bFc7D4cbD0e58fA175876fF51f7097f59" as Hex,
 	groth16Verifier: "0x0CD5A7D426ED71D8d1e216FEEADBC2F6574D053D" as Hex,
 	stealthAnnouncer: "0xF6b3223aC0107e2bd64A982e0212C0b0751c269B" as Hex,
 };
+
+/** Base L2 Mainnet (Chain 8453) */
+export const BASE_CONTRACTS = {
+	shieldedPool: "0xe01Aba8855c83f2A70eE0A0D7401F8B7DB289C86" as Hex,
+	groth16Verifier: "0xAC50E112F95fbf97bDAc64F5E0Ad1fcfe3a252be" as Hex,
+	stealthAnnouncer: "0x1251E4E0B9c55406427aBef555dB580Da90D8A12" as Hex,
+};
+
+/** Default contracts by chain ID */
+export const CONTRACTS_BY_CHAIN: Record<number, typeof BITTENSOR_CONTRACTS> = {
+	964: BITTENSOR_CONTRACTS,
+	945: BITTENSOR_CONTRACTS, // testnet uses same addresses for now
+	8453: BASE_CONTRACTS,
+};
+
+/** Legacy alias */
+export const MAINNET_CONTRACTS = BITTENSOR_CONTRACTS;
 
 // ---------------------------------------------------------------
 // Minimal ABI fragments — only the functions/events we call

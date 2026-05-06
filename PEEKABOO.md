@@ -65,7 +65,9 @@ peek-a-boo/
 
 ---
 
-## Deployed Contracts (Bittensor EVM Mainnet, Chain 964)
+## Deployed Contracts
+
+### Bittensor EVM Mainnet (Chain 964)
 
 | Contract | Address |
 |---|---|
@@ -74,8 +76,17 @@ peek-a-boo/
 | **ShieldedPool** | `0xaf243B3bFc7D4cbD0e58fA175876fF51f7097f59` |
 | **StealthAnnouncer** | `0xF6b3223aC0107e2bd64A982e0212C0b0751c269B` |
 
+### Base L2 Mainnet (Chain 8453)
+
+| Contract | Address |
+|---|---|
+| **PoseidonT3** | `0x95C9521932F9Ed6bBF907b5e950C4BC7656d1439` |
+| **Groth16Verifier** | `0xAC50E112F95fbf97bDAc64F5E0Ad1fcfe3a252be` |
+| **ShieldedPool** | `0xe01Aba8855c83f2A70eE0A0D7401F8B7DB289C86` |
+| **StealthAnnouncer** | `0x1251E4E0B9c55406427aBef555dB580Da90D8A12` |
+
 Deployer: `0xc979313aB30327C30C6Da0f89B2CFf19900363E6`
-Tree depth: 20 (max 1,048,576 deposits)
+Tree depth: 20 (max 1,048,576 deposits) · Fee: 0.5%
 
 ---
 
