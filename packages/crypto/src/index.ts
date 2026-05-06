@@ -64,3 +64,15 @@ export type {
 	ComplianceAttestation,
 	ComplianceVerification,
 } from "./compliance.js";
+
+// Multi-denomination pool helpers
+export {
+	DENOMINATIONS,
+	TAO_DENOMINATIONS,
+	ETH_DENOMINATIONS,
+	denominationLabel,
+	suggestDenomination,
+	isExactlyDenominatable,
+	totalDepositsNeeded,
+} from "./denominations.js";
+export type { DenominationSplit } from "./denominations.js";

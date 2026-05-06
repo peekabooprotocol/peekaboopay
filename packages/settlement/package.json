@@ -21,7 +21,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@peekaboopay/types": "*"
+    "@peekaboopay/types": "*",
+    "ethers": "^6.13.0"
   },
   "devDependencies": {
     "@peekaboopay/tsconfig": "*"

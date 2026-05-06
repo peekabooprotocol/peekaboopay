@@ -432,6 +432,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); pa
       <a href="#encryption" class="sidebar-link">Note Encryption</a>
       <a href="#viewing-keys" class="sidebar-link">Viewing Keys</a>
       <a href="#compliance" class="sidebar-link">Compliance Proofs</a>
+      <a href="#lit" class="sidebar-link">Lit Protocol</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-heading">Reference</div>
@@ -1075,6 +1076,73 @@ Master Seed (32 bytes)
       </div>
     </section>
 
+    <hr class="doc-divider">
+
+    <!-- LIT PROTOCOL -->
+    <section id="lit" class="doc-section r">
+      <h2 class="doc-section-title"><span class="sec-num">20</span> Lit Protocol</h2>
+      <p class="doc-p">
+        Decentralized key management via <strong>Lit Protocol</strong>. Agents sign transactions through Lit's threshold network &mdash; no raw private key is ever held locally. Keys are split across decentralized TEE nodes using Multi-Party Computation. More than 2/3 of nodes must combine their shares to sign.
+      </p>
+
+      <h3 class="doc-h3">Why Lit?</h3>
+      <p class="doc-p">
+        When an agent holds a raw private key in memory, a compromised process means stolen funds. Lit eliminates this &mdash; the full key never exists in any single location. Signing policies are enforced cryptographically by the network, not by SDK-level checks that can be bypassed.
+      </p>
+
+      <h3 class="doc-h3">PKP Signer (Drop-in Replacement)</h3>
+      <p class="doc-p">
+        <code>createPKPSigner()</code> returns an <code>ethers.Signer</code> backed by Lit's Programmable Key Pair. It's a drop-in replacement for <code>ethers.Wallet</code> &mdash; all existing adapter calls work unchanged.
+      </p>
+      <div class="code-block">
+        <span class="code-label">TypeScript</span>
+<span class="kw">import</span> { <span class="fn">createLitClient</span>, <span class="fn">createPKPSigner</span> } <span class="kw">from</span> <span class="str">'@peekaboopay/lit'</span>
+
+<span class="cmt">// Connect to Lit network</span>
+<span class="kw">const</span> litClient = <span class="kw">await</span> <span class="fn">createLitClient</span>({ network: <span class="str">'datil'</span> })
+
+<span class="cmt">// Create signer — no raw key</span>
+<span class="kw">const</span> signer = <span class="kw">await</span> <span class="fn">createPKPSigner</span>({
+  litClient,
+  pkpPublicKey: <span class="str">'0x04...'</span>,
+  authSig,
+  provider,
+})
+<span class="cmt">// Use exactly like ethers.Wallet</span>
+      </div>
+
+      <h3 class="doc-h3">Wrapped Keys</h3>
+      <p class="doc-p">
+        Import existing private keys into Lit's encrypted storage. The key is encrypted with Lit's BLS key, stored in their infrastructure, and only decrypted inside a TEE during signing &mdash; then wiped from memory.
+      </p>
+      <table class="doc-table">
+        <thead><tr><th>Function</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>wrapPrivateKey()</code></td><td>Import an existing key into Lit's encrypted storage</td></tr>
+          <tr><td><code>generateWrappedKey()</code></td><td>Generate a new key entirely within Lit's TEE</td></tr>
+          <tr><td><code>signWithWrappedKey()</code></td><td>Sign a transaction &mdash; key decrypted in TEE, wiped after</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="doc-h3">Programmable Policies</h3>
+      <p class="doc-p">
+        Lit Actions are JavaScript programs that run inside Lit's TEE before signing. They enforce policies that can't be bypassed by the agent &mdash; spending limits, recipient whitelists, chain restrictions, and cooldown periods are cryptographically guaranteed.
+      </p>
+      <table class="doc-table">
+        <thead><tr><th>Function</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>createPolicyAction(policy)</code></td><td>Generate a Lit Action from a policy config</td></tr>
+          <tr><td><code>SHIELD_ACTION</code></td><td>Pre-built: max deposit amount enforcement</td></tr>
+          <tr><td><code>UNSHIELD_ACTION</code></td><td>Pre-built: daily limits + cooldown periods</td></tr>
+          <tr><td><code>TRANSFER_ACTION</code></td><td>Pre-built: recipient whitelist enforcement</td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-card">
+        <div class="info-card-label">No Raw Keys</div>
+        <p>With Lit Protocol, the agent's private key never exists on any single machine. Threshold signatures across decentralized TEE nodes ensure that even a fully compromised agent process cannot steal funds.</p>
+      </div>
+    </section>
 
   </main>
 </div>

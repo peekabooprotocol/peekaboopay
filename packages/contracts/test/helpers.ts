@@ -63,6 +63,39 @@ export async function generateWithdrawProof(
 }
 
 /**
+ * Deploy the Groth16Verifier and DenominatedPool contracts together.
+ * Handles PoseidonT3 library linking automatically.
+ * Returns both contract instances.
+ */
+export async function deployDenominatedPoolWithVerifier(levels: number, denomination: bigint) {
+	// Step 1: Deploy PoseidonT3 library
+	const poseidonAddr = await deployPoseidonT3();
+
+	// Step 2: Deploy the Groth16 verifier
+	const VerifierFactory = await ethers.getContractFactory("Groth16Verifier");
+	const verifier = await VerifierFactory.deploy();
+	await verifier.waitForDeployment();
+
+	// Step 3: Deploy DenominatedPool with library linking
+	const PoolFactory = await ethers.getContractFactory("DenominatedPool", {
+		libraries: {
+			"poseidon-solidity/PoseidonT3.sol:PoseidonT3": poseidonAddr,
+		},
+	});
+	const [signer] = await ethers.getSigners();
+	const pool = await PoolFactory.deploy(
+		levels,
+		await verifier.getAddress(),
+		denomination,
+		signer.address, // fee recipient = deployer in tests
+		50, // 0.5% fee
+	);
+	await pool.waitForDeployment();
+
+	return { pool, verifier };
+}
+
+/**
  * Full workflow: create deposit, insert into tree, generate proof.
  * Returns everything needed for a contract withdrawal.
  */

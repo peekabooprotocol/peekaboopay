@@ -55,7 +55,41 @@ async function main() {
 	console.log(`  Verifier: ${verifierAddr}`);
 	console.log(`  Fee: ${FEE_BPS / 100}% → ${feeRecipient}`);
 
-	// Step 4: Deploy StealthAnnouncer
+	// Step 4: Deploy DenominatedPool instances (0.1, 1, 10 TAO)
+	// All share the same Groth16Verifier and PoseidonT3 library
+	const DenomPoolFactory = await ethers.getContractFactory("DenominatedPool", {
+		libraries: {
+			"poseidon-solidity/PoseidonT3.sol:PoseidonT3": poseidonAddr,
+		},
+	});
+
+	const denominations = [
+		{ label: "0.1 TAO", value: ethers.parseEther("0.1") },
+		{ label: "1 TAO",   value: ethers.parseEther("1") },
+		{ label: "10 TAO",  value: ethers.parseEther("10") },
+	];
+
+	const denomPoolAddrs: Record<string, string> = {};
+
+	for (const denom of denominations) {
+		console.log(`\nDeploying DenominatedPool (${denom.label})...`);
+		const denomPool = await DenomPoolFactory.deploy(
+			TREE_DEPTH,
+			verifierAddr,
+			denom.value,
+			feeRecipient,
+			FEE_BPS,
+			txOverrides,
+		);
+		await denomPool.waitForDeployment();
+		const denomPoolAddr = await denomPool.getAddress();
+		denomPoolAddrs[denom.label] = denomPoolAddr;
+		console.log(`  DenominatedPool (${denom.label}) deployed at: ${denomPoolAddr}`);
+		console.log(`  Denomination: ${denom.label} (${denom.value} wei)`);
+		console.log(`  Tree depth: ${TREE_DEPTH} | Verifier: ${verifierAddr}`);
+	}
+
+	// Step 5: Deploy StealthAnnouncer
 	console.log("\nDeploying StealthAnnouncer...");
 	const AnnouncerFactory = await ethers.getContractFactory("StealthAnnouncer");
 	const announcer = await AnnouncerFactory.deploy(txOverrides);
@@ -70,6 +104,7 @@ async function main() {
 				PoseidonT3: poseidonAddr,
 				Groth16Verifier: verifierAddr,
 				ShieldedPool: poolAddr,
+				DenominatedPools: denomPoolAddrs,
 				StealthAnnouncer: announcerAddr,
 				network: networkName,
 				treeDepth: TREE_DEPTH,
